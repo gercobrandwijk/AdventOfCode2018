@@ -93,12 +93,13 @@ namespace Day1
         {
             int value = 0;
 
-            List<int> reachedValues = new List<int> { value };
+            Dictionary<int, bool> reachedValues = new Dictionary<int, bool>();
+            reachedValues.Add(value, true);
 
             partTwoExecuteRecursion(values, value, reachedValues);
         }
 
-        static void partTwoExecuteRecursion(List<int> values, int value, List<int> reachedValues)
+        static void partTwoExecuteRecursion(List<int> values, int value, Dictionary<int, bool> reachedValues)
         {
             Boolean done = false;
 
@@ -106,7 +107,7 @@ namespace Day1
             {
                 value += input;
 
-                if (reachedValues.Contains(value))
+                if (reachedValues.ContainsKey(value))
                 {
                     Console.WriteLine(value);
 
@@ -115,7 +116,7 @@ namespace Day1
                     break;
                 }
 
-                reachedValues.Add(value);
+                reachedValues.Add(value, true);
             }
 
             if (!done)
