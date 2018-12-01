@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Day1
 {
@@ -7,34 +8,53 @@ namespace Day1
     {
         static void Main(string[] args)
         {
-            //Console.WriteLine("Part one");
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
 
-            //partOne();
+            Console.WriteLine("Part one");
+
+            partOne();
 
             Console.WriteLine("Part two");
 
             partTwo();
-        }
 
-        static void partOne()
-        {
-            partOneExecute(partOneInputValuesTest1);
-            partOneExecute(partOneInputValuesTest2);
-            partOneExecute(partOneInputValuesTest3);
-            partOneExecute(realInputValues);
+            stopwatch.Stop();
+
+            Console.WriteLine($"Done in: {stopwatch.ElapsedMilliseconds}ms");
 
             Console.ReadLine();
         }
 
-        static void partOneExecute(string[] values)
+        static List<int> toIntegers(string[] values)
         {
-            int value = 0;
+            List<int> intValues = new List<int>();
+
             foreach (string input in values)
             {
                 if (input.StartsWith("+"))
-                    value += int.Parse(input.Substring(1));
+                    intValues.Add(+int.Parse(input.Substring(1)));
                 else
-                    value -= int.Parse(input.Substring(1));
+                    intValues.Add(-int.Parse(input.Substring(1)));
+            }
+
+            return intValues;
+        }
+
+        static void partOne()
+        {
+            partOneExecute(toIntegers(partOneInputValuesTest1));
+            partOneExecute(toIntegers(partOneInputValuesTest2));
+            partOneExecute(toIntegers(partOneInputValuesTest3));
+            partOneExecute(toIntegers(realInputValues));
+        }
+
+        static void partOneExecute(List<int> values)
+        {
+            int value = 0;
+            foreach (int input in values)
+            {
+                value += input;
             }
             Console.WriteLine(value);
         }
@@ -62,16 +82,14 @@ namespace Day1
 
         static void partTwo()
         {
-            partTwoExecute(partTwoInputValuesTest1);
-            partTwoExecute(partTwoInputValuesTest2);
-            partTwoExecute(partTwoInputValuesTest3);
-            partTwoExecute(partTwoInputValuesTest4);
-            partTwoExecute(realInputValues);
-
-            Console.ReadLine();
+            partTwoExecute(toIntegers(partTwoInputValuesTest1));
+            partTwoExecute(toIntegers(partTwoInputValuesTest2));
+            partTwoExecute(toIntegers(partTwoInputValuesTest3));
+            partTwoExecute(toIntegers(partTwoInputValuesTest4));
+            partTwoExecute(toIntegers(realInputValues));
         }
 
-        static void partTwoExecute(string[] values)
+        static void partTwoExecute(List<int> values)
         {
             int value = 0;
 
@@ -80,16 +98,13 @@ namespace Day1
             partTwoExecuteRecursion(values, value, reachedValues);
         }
 
-        static void partTwoExecuteRecursion(string[] values, int value, List<int> reachedValues)
+        static void partTwoExecuteRecursion(List<int> values, int value, List<int> reachedValues)
         {
             Boolean done = false;
 
-            foreach (string input in values)
+            foreach (int input in values)
             {
-                if (input.StartsWith("+"))
-                    value += int.Parse(input.Substring(1));
-                else
-                    value -= int.Parse(input.Substring(1));
+                value += input;
 
                 if (reachedValues.Contains(value))
                 {
