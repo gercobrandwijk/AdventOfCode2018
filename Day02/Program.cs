@@ -13,6 +13,8 @@ namespace Day02
             partOne();
             partTwo();
 
+            Console.Clear();
+
             Stopwatch watch = Stopwatch.StartNew();
 
             Console.WriteLine("Part one");
@@ -21,6 +23,7 @@ namespace Day02
             watch.Stop();
             Console.WriteLine($"Done in: {watch.Elapsed.TotalMilliseconds}ms");
 
+            Console.WriteLine("");
 
             Console.WriteLine("Part two");
             watch.Restart();
