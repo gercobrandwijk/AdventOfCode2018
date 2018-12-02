@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Day1
+namespace Day01
 {
     class Program
     {
