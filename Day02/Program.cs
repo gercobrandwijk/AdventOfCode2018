@@ -9,20 +9,24 @@ namespace Day02
     {
         static void Main(string[] args)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-            Console.WriteLine("Part one");
-
+            // Do JIT compilation
             partOne();
-
-            Console.WriteLine("Part two");
-
             partTwo();
 
-            stopwatch.Stop();
+            Stopwatch watch = Stopwatch.StartNew();
 
-            Console.WriteLine($"Done in: {stopwatch.ElapsedMilliseconds}ms");
+            Console.WriteLine("Part one");
+            watch.Restart();
+            partOne();
+            watch.Stop();
+            Console.WriteLine($"Done in: {watch.Elapsed.TotalMilliseconds}ms");
+
+
+            Console.WriteLine("Part two");
+            watch.Restart();
+            partTwo();
+            watch.Stop();
+            Console.WriteLine($"Done in: {watch.Elapsed.TotalMilliseconds}ms");
 
             Console.ReadLine();
         }
