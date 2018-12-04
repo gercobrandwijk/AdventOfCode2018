@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Day02
+namespace Day03
 {
     class Program
     {
         static void Main(string[] args)
         {
             // Do JIT compilation
-            execute(inputValuesTest.ToList());
+            //execute(inputValuesTest.ToList());
 
             Console.Clear();
 
