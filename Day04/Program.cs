@@ -159,11 +159,11 @@ namespace Day04
                 Console.WriteLine("Guard #" + guardMomentPair.Key + ": asleep for " + guardMomentPair.Value.MinutesAsleep + "m, mostly on " + guardMomentPair.Value.AsleepMostMinute + "m (so multiplication = " + guardMomentPair.Key * guardMomentPair.Value.AsleepMostMinute + ")");
             }
 
-            Console.WriteLine("Most asleep:");
+            Console.WriteLine("Guard who's most sleepy:");
             KeyValuePair<int, GuardMoment> guardMomentPairMostAsleep = guardMoments.OrderBy(x => x.Value.MinutesAsleep).Last();
             Console.WriteLine("Guard #" + guardMomentPairMostAsleep.Key + ": asleep for " + guardMomentPairMostAsleep.Value.MinutesAsleep + "m, mostly on " + guardMomentPairMostAsleep.Value.AsleepMostMinute + "m (so multiplication = " + guardMomentPairMostAsleep.Key * guardMomentPairMostAsleep.Value.AsleepMostMinute + ")");
 
-            Console.WriteLine("Most on same minute:");
+            Console.WriteLine("Guard that's most asleep on same minute:");
             KeyValuePair<int, GuardMoment> guardMomentPairMostOnSameMinute = guardMoments.OrderBy(x => x.Value.AsleepMostValue).Last();
             Console.WriteLine("Guard #" + guardMomentPairMostOnSameMinute.Key + ": asleep for " + guardMomentPairMostOnSameMinute.Value.MinutesAsleep + "m, mostly on " + guardMomentPairMostOnSameMinute.Value.AsleepMostMinute + "m (so multiplication = " + guardMomentPairMostOnSameMinute.Key * guardMomentPairMostOnSameMinute.Value.AsleepMostMinute + ")");
         }
