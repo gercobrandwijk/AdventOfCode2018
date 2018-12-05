@@ -11,8 +11,7 @@ namespace Day04
         static void Main(string[] args)
         {
             // Do JIT compilation
-            partOne();
-            //partTwo();
+            execute();
 
             Console.Clear();
 
@@ -20,17 +19,9 @@ namespace Day04
 
             Console.WriteLine("Part one");
             watch.Restart();
-            partOne();
+            execute();
             watch.Stop();
             Console.WriteLine($"Done in: {watch.Elapsed.TotalMilliseconds}ms");
-
-            //Console.WriteLine("");
-
-            //Console.WriteLine("Part two");
-            //watch.Restart();
-            //partTwo();
-            //watch.Stop();
-            //Console.WriteLine($"Done in: {watch.Elapsed.TotalMilliseconds}ms");
 
             Console.ReadLine();
         }
@@ -91,10 +82,10 @@ namespace Day04
             return guardEvents.Where(x => x.Type != GuardEventType.BeginShift).ToList();
         }
 
-        static void partOne()
+        static void execute()
         {
-            //partOneExecute(parse(partOneInputValuesTest.ToList()));
-            partOneExecute(parse(realInputValues.ToList()));
+            execute(parse(inputValuesTest.ToList()));
+            execute(parse(realInputValues.ToList()));
         }
 
         public class GuardMoment
@@ -113,7 +104,7 @@ namespace Day04
             }
         }
 
-        static void partOneExecute(List<GuardEvent> guardEvents)
+        static void execute(List<GuardEvent> guardEvents)
         {
             IDictionary<int, GuardMoment> guardMoments = new Dictionary<int, GuardMoment>();
 
@@ -168,7 +159,7 @@ namespace Day04
             Console.WriteLine("Guard #" + guardMomentPairMostOnSameMinute.Key + ": asleep for " + guardMomentPairMostOnSameMinute.Value.MinutesAsleep + "m, mostly on " + guardMomentPairMostOnSameMinute.Value.AsleepMostMinute + "m (so multiplication = " + guardMomentPairMostOnSameMinute.Key * guardMomentPairMostOnSameMinute.Value.AsleepMostMinute + ")");
         }
 
-        static string[] partOneInputValuesTest = new string[]
+        static string[] inputValuesTest = new string[]
         {
             "[1518-11-01 00:00] Guard #10 begins shift",
             "[1518-11-01 00:05] falls asleep",
@@ -188,71 +179,6 @@ namespace Day04
             "[1518-11-05 00:45] falls asleep",
             "[1518-11-05 00:55] wakes up"
         };
-
-        //static void partTwo()
-        //{
-        //    partTwoExecute(partTwoInputValuesTest.ToList());
-        //    partTwoExecute(realInputValues.ToList());
-        //}
-
-        //static void partTwoExecute(List<string> values)
-        //{
-        //    string resultValue = null, resultValueCompare = null;
-        //    int? resultDifferenceIndex = null;
-
-        //    for (int i = 0; i < values.Count; i++)
-        //    {
-        //        string value = values[i];
-
-        //        for (int j = i + 1; j < values.Count; j++)
-        //        {
-        //            string valueCompare = values[j];
-
-        //            resultDifferenceIndex = null;
-
-        //            for (int k = 0; k < value.Length; k++)
-        //            {
-        //                if (value[k] != valueCompare[k])
-        //                {
-        //                    if (!resultDifferenceIndex.HasValue)
-        //                    {
-        //                        resultDifferenceIndex = k;
-        //                    }
-        //                    else
-        //                    {
-        //                        resultDifferenceIndex = null;
-
-        //                        break;
-        //                    }
-        //                }
-        //            }
-
-        //            if (resultDifferenceIndex.HasValue)
-        //            {
-        //                resultValue = value;
-        //                resultValueCompare = valueCompare;
-
-        //                break;
-        //            }
-        //        }
-
-        //        if (resultValue != null && resultValueCompare != null)
-        //            break;
-        //    }
-
-        //    Console.WriteLine(resultValue.Substring(0, resultDifferenceIndex.Value) + resultValue.Substring(resultDifferenceIndex.Value + 1) + " (" + resultValue + " == " + resultValueCompare + ")");
-        //}
-
-        //static string[] partTwoInputValuesTest = new string[]
-        //{
-        //    "abcde",
-        //    "fghij",
-        //    "klmno",
-        //    "pqrst",
-        //    "fguij",
-        //    "axcye",
-        //    "wvxyz"
-        //};
 
         static string[] realInputValues = new string[]
         {
