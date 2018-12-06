@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 
 namespace Day05
 {
@@ -39,32 +39,23 @@ namespace Day05
 
         static void partOne(string value)
         {
-            StringBuilder stringBuilder = new StringBuilder(value);
+            Stack<char> charStack = new Stack<char>();
 
-            bool removed = true;
-
-            while (removed)
+            for (int i = 0; i < value.Length; i++)
             {
-                removed = false;
+                char current = value[i];
 
-                for (int i = 0; i < stringBuilder.Length - 1; i++)
-                {
-                    char current = stringBuilder[i];
-                    char next = stringBuilder[i + 1];
+                char latestInStack;
 
-                    if ((char.IsLower(current) && char.IsUpper(next) && current == char.ToLower(next)) ||
-                        (char.IsUpper(current) && char.IsLower(next) && current == char.ToUpper(next)))
-                    {
-                        removed = true;
-
-                        stringBuilder.Remove(i, 2);
-
-                        i += 2;
-                    }
-                }
+                if (charStack.TryPeek(out latestInStack) && current == latestInStack + 32 || current + 32 == latestInStack)
+                    charStack.Pop();
+                else
+                    charStack.Push(current);
             }
 
-            Console.WriteLine(stringBuilder.Length + ": " + stringBuilder);
+            String newValue = new String(charStack.ToArray());
+
+            Console.WriteLine(newValue.Length + ": " + newValue);
         }
 
         static void partTwo()
@@ -85,34 +76,25 @@ namespace Day05
                 valueTemp = valueTemp.Replace(alphabetChar.ToString(), "");
                 valueTemp = valueTemp.Replace(char.ToUpper(alphabetChar).ToString(), "");
 
-                StringBuilder stringBuilder = new StringBuilder(valueTemp);
+                Stack<char> charStack = new Stack<char>();
 
-                bool removed = true;
-
-                while (removed)
+                for (int i = 0; i < valueTemp.Length; i++)
                 {
-                    removed = false;
+                    char current = valueTemp[i];
 
-                    for (int i = 0; i < stringBuilder.Length - 1; i++)
-                    {
-                        char current = stringBuilder[i];
-                        char next = stringBuilder[i + 1];
+                    char latestInStack;
 
-                        if ((char.IsLower(current) && char.IsUpper(next) && current == char.ToLower(next)) ||
-                            (char.IsUpper(current) && char.IsLower(next) && current == char.ToUpper(next)))
-                        {
-                            removed = true;
-
-                            stringBuilder.Remove(i, 2);
-
-                            i += 2;
-                        }
-                    }
+                    if (charStack.TryPeek(out latestInStack) && current == latestInStack + 32 || current + 32 == latestInStack)
+                        charStack.Pop();
+                    else
+                        charStack.Push(current);
                 }
 
-                if (stringBuilder.Length < shortestLength)
+                String newValue = new String(charStack.ToArray());
+
+                if (newValue.Length < shortestLength)
                 {
-                    shortestLength = stringBuilder.Length;
+                    shortestLength = newValue.Length;
                     shortestLengthChar = alphabetChar;
                 }
             }
