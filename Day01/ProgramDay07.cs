@@ -13,28 +13,22 @@ namespace AdventOfCode
 
             Stopwatch watch = Stopwatch.StartNew();
 
-            Console.WriteLine("Part one");
-            watch.Restart();
-            partOne();
-            watch.Stop();
-            Console.WriteLine($"Done in: {watch.Elapsed.TotalMilliseconds}ms");
-
-            //Console.WriteLine("Part two");
+            //Console.WriteLine("Part one");
             //watch.Restart();
-            //partTwo();
+            //partOne();
             //watch.Stop();
             //Console.WriteLine($"Done in: {watch.Elapsed.TotalMilliseconds}ms");
+
+            Console.WriteLine("Part two");
+            watch.Restart();
+            partTwo();
+            watch.Stop();
+            Console.WriteLine($"Done in: {watch.Elapsed.TotalMilliseconds}ms");
 
             Console.ReadLine();
         }
 
-        static void partOne()
-        {
-            partOne(inputValuesTest);
-            partOne(realInputValues);
-        }
-
-        static void partOne(string[] values)
+        static List<Step> parse(string[] values)
         {
             List<Step> allSteps = new List<Step>();
 
@@ -63,14 +57,25 @@ namespace AdventOfCode
                 nextStep.Conditions.Add(step);
             }
 
-            List<Step> stepsToExecute = allSteps.Where(x => !x.Conditions.Any()).ToList();
+            return allSteps;
+        }
+
+        static void partOne()
+        {
+            partOne(parse(inputValuesTest));
+            partOne(parse(realInputValues));
+        }
+
+        static void partOne(List<Step> values)
+        {
+            List<Step> stepsToExecute = values.Where(x => !x.Conditions.Any()).ToList();
 
             String result = "";
 
             do
             {
                 Step step = stepsToExecute.OrderBy(x => x.Name).First();
-                step.Done = true;
+                step.Executed = true;
 
                 result += step;
 
@@ -89,6 +94,90 @@ namespace AdventOfCode
             Console.WriteLine("Execution order: " + result);
         }
 
+        static void partTwo()
+        {
+            partTwo(parse(inputValuesTest));
+            partTwo(parse(realInputValues));
+        }
+
+        static void partTwo(List<Step> values)
+        {
+            List<Step> stepsToExecute = values.Where(x => !x.Conditions.Any()).ToList();
+
+            List<Step> stepsExecuting = new List<Step>();
+
+            List<Worker> workers = new List<Worker>();
+
+            for (int i = 0; i < 5; i++)
+                workers.Add(new Worker(null));
+
+            String result = "";
+
+            int ticks = 0;
+
+            do
+            {
+                ticks++;
+
+                List<Worker> busyWorkers = workers.Where(x => x.Step != null).ToList();
+
+                foreach (Worker worker in busyWorkers)
+                {
+                    if (worker.Step.Progress >= worker.Step.Duration)
+                    {
+                        worker.Step.Executed = true;
+
+                        result += worker.Step;
+
+                        stepsToExecute.Remove(worker.Step);
+
+                        foreach (Step nextStep in worker.Step.Next)
+                        {
+                            nextStep.Conditions.Remove(worker.Step);
+
+                            if (!nextStep.Conditions.Any())
+                                stepsToExecute.Add(nextStep);
+                        }
+
+                        worker.Step = null;
+                    }
+                    else
+                    {
+                        worker.Step.Progress++;
+                    }
+                }
+
+                List<Worker> idleWorkers = workers.Where(x => x.Step == null).ToList();
+
+                foreach (Worker worker in idleWorkers)
+                {
+                    Step step = stepsToExecute.Where(x => !x.Executing).OrderBy(x => x.Name).FirstOrDefault();
+
+                    if (step != null)
+                    {
+                        worker.Step = step;
+                        worker.Step.Progress = 1;
+                        worker.Step.Executing = true;
+                    }
+                }
+            }
+            while (stepsToExecute.Any());
+
+            ticks--;
+
+            Console.WriteLine("Execution order: " + result + " (in " + ticks + " ticks)");
+        }
+
+        public class Worker
+        {
+            public Step Step { get; set; }
+
+            public Worker(Step step)
+            {
+                this.Step = step;
+            }
+        }
+
         public class Step
         {
             public List<Step> Next { get; set; }
@@ -97,13 +186,21 @@ namespace AdventOfCode
 
             public char Name { get; set; }
 
-            public bool Done { get; set; }
+            public bool Executing { get; set; }
+
+            public bool Executed { get; set; }
+
+            public int Progress { get; set; }
+
+            public int Duration { get; set; }
 
             public Step(char name)
             {
                 this.Name = name;
                 this.Next = new List<Step>();
                 this.Conditions = new List<Step>();
+
+                this.Duration = (int)name - 4;
             }
 
             public override string ToString()
