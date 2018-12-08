@@ -9,7 +9,7 @@ namespace AdventOfCode
     {
         public static void Run()
         {
-            Console.WriteLine("ProgramDay06");
+            Console.WriteLine("ProgramDay08");
 
             Stopwatch watch = Stopwatch.StartNew();
 

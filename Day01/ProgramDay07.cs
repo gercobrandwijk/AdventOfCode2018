@@ -9,15 +9,15 @@ namespace AdventOfCode
     {
         public static void Run()
         {
-            Console.WriteLine("ProgramDay06");
+            Console.WriteLine("ProgramDay07");
 
             Stopwatch watch = Stopwatch.StartNew();
 
-            //Console.WriteLine("Part one");
-            //watch.Restart();
-            //partOne();
-            //watch.Stop();
-            //Console.WriteLine($"Done in: {watch.Elapsed.TotalMilliseconds}ms");
+            Console.WriteLine("Part one");
+            watch.Restart();
+            partOne();
+            watch.Stop();
+            Console.WriteLine($"Done in: {watch.Elapsed.TotalMilliseconds}ms");
 
             Console.WriteLine("Part two");
             watch.Restart();
