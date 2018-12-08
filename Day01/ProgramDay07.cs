@@ -24,8 +24,6 @@ namespace AdventOfCode
             partTwo();
             watch.Stop();
             Console.WriteLine($"Done in: {watch.Elapsed.TotalMilliseconds}ms");
-
-            Console.ReadLine();
         }
 
         static List<Step> parse(string[] values)

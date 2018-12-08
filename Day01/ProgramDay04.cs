@@ -19,8 +19,6 @@ namespace AdventOfCode
             execute();
             watch.Stop();
             Console.WriteLine($"Done in: {watch.Elapsed.TotalMilliseconds}ms");
-
-            Console.ReadLine();
         }
 
         public class GuardEvent
