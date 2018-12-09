@@ -84,13 +84,10 @@ namespace AdventOfCode
 
                         player.Score += previous7Node.Value;
 
-                        Node previous = previous7Node.Previous;
-                        Node next = previous7Node.Next;
+                        previous7Node.Previous.Next = previous7Node.Next;
+                        previous7Node.Next.Previous = previous7Node.Previous;
 
-                        previous.Next = next;
-                        next.Previous = previous;
-
-                        previousNode = next;
+                        previousNode = previous7Node.Next;
                     }
                     else
                     {
