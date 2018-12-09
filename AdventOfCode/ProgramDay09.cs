@@ -47,10 +47,8 @@ namespace AdventOfCode
 
         static void partOne(Game game)
         {
-            List<int> stack = new List<int>();
-            stack.Add(0);
-
-            int lastMarbleIndex = 0;
+            Node firstNode = new Node(0);
+            Node previousNode = firstNode;
 
             Console.WriteLine("Game starting: " + game);
 
@@ -65,11 +63,14 @@ namespace AdventOfCode
 
                 currentMarble++;
 
-                if (stack.Count == 1)
+                if (previousNode.Previous == null && previousNode.Next == null)
                 {
-                    stack.Add(currentMarble);
+                    Node node = new Node(currentMarble, previousNode, previousNode);
 
-                    lastMarbleIndex = 1;
+                    previousNode.Previous = node;
+                    previousNode.Next = node;
+
+                    previousNode = node;
                 }
                 else
                 {
@@ -79,38 +80,31 @@ namespace AdventOfCode
                     {
                         player.Score += currentMarble;
 
-                        int nextMarbleIndex = lastMarbleIndex - 7;
+                        Node previous7Node = getNodePrevious(previousNode, 7);
 
-                        if (nextMarbleIndex < 0)
-                            nextMarbleIndex = stack.Count + nextMarbleIndex;
+                        player.Score += previous7Node.Value;
 
-                        player.Score += stack[nextMarbleIndex];
+                        Node previous = previous7Node.Previous;
+                        Node next = previous7Node.Next;
 
-                        stack.RemoveAt(nextMarbleIndex);
+                        previous.Next = next;
+                        next.Previous = previous;
 
-                        lastMarbleIndex = nextMarbleIndex;
+                        previousNode = next;
                     }
                     else
                     {
-                        int maxMarbleIndex = stack.Count - 1;
+                        Node node = new Node(currentMarble);
 
-                        int nextMarbleIndex = lastMarbleIndex + 2;
+                        Node next2Node = getNodeNext(previousNode, 2);
 
-                        // Add at end
-                        if (nextMarbleIndex == maxMarbleIndex + 1)
-                        {
-                            stack.Add(currentMarble);
+                        node.Previous = next2Node.Previous;
+                        node.Next = next2Node;
 
-                        }
-                        // Insert
-                        else
-                        {
-                            nextMarbleIndex = nextMarbleIndex % stack.Count;
+                        next2Node.Previous.Next = node;
+                        next2Node.Previous = node;
 
-                            stack.Insert(nextMarbleIndex, currentMarble);
-                        }
-
-                        lastMarbleIndex = nextMarbleIndex;
+                        previousNode = node;
                     }
                 }
 
@@ -118,15 +112,52 @@ namespace AdventOfCode
 
                 //Console.Write("Player " + player.Number + ": ");
 
-                //foreach (int value in stack)
+                //Node writeNode = firstNode;
+                //Console.Write(writeNode.Value + " ");
+
+                //Node next = writeNode.Next;
+
+                //while (next != null && next.Value != firstNode.Value)
                 //{
-                //    Console.Write(value + " ");
+                //    Console.Write(next.Value + " ");
+
+                //    next = next.Next;
                 //}
 
                 //Console.WriteLine();
             }
 
             Console.WriteLine("Game (" + game + ") winner is: " + game.Players.OrderBy(x => x.Score).Last());
+        }
+
+        private static Node getNodePrevious(Node previousNode, int amount)
+        {
+            int counter = amount;
+            Node temp = previousNode;
+
+            while (counter > 0)
+            {
+                temp = temp.Previous;
+
+                counter--;
+            }
+
+            return temp;
+        }
+
+        private static Node getNodeNext(Node previousNode, int amount)
+        {
+            int counter = amount;
+            Node temp = previousNode;
+
+            while (counter > 0)
+            {
+                temp = temp.Next;
+
+                counter--;
+            }
+
+            return temp;
         }
 
         public class Game
@@ -158,7 +189,7 @@ namespace AdventOfCode
         public class Player
         {
             public int Number { get; set; }
-            public int Score { get; set; }
+            public Int64 Score { get; set; }
 
             public Player(int number)
             {
@@ -168,6 +199,37 @@ namespace AdventOfCode
             public override string ToString()
             {
                 return this.Number + ", score: " + this.Score;
+            }
+        }
+
+        public class Node
+        {
+            public Node Previous { get; set; }
+            public Node Next { get; set; }
+
+            public int Value { get; set; }
+
+            public Node(int value)
+            {
+                this.Value = value;
+            }
+
+            public Node(int value, Node previous)
+            {
+                this.Value = value;
+                this.Previous = previous;
+            }
+
+            public Node(int value, Node previous, Node next)
+            {
+                this.Value = value;
+                this.Previous = previous;
+                this.Next = next;
+            }
+
+            public override string ToString()
+            {
+                return this.Value.ToString();
             }
         }
 
