@@ -9,7 +9,7 @@ namespace AdventOfCode
     {
         public static void Run()
         {
-            Console.WriteLine("ProgramDay09");
+            Console.WriteLine("ProgramDay10");
 
             Stopwatch watch = Stopwatch.StartNew();
 
@@ -18,12 +18,6 @@ namespace AdventOfCode
             partOne();
             watch.Stop();
             Console.WriteLine($"Done in: {watch.Elapsed.TotalMilliseconds}ms");
-
-            //Console.WriteLine("Part two");
-            //watch.Restart();
-            //partTwo();
-            //watch.Stop();
-            //Console.WriteLine($"Done in: {watch.Elapsed.TotalMilliseconds}ms");
         }
 
         static List<Point> parse(string[] values)
@@ -34,47 +28,77 @@ namespace AdventOfCode
         static void partOne()
         {
             partOne(parse(inputValuesTest));
-            //partOne(parse(realInputValues));
+            partOne(parse(realInputValues));
         }
 
         static void partOne(List<Point> points)
         {
-            print(points);
+            int width = int.MaxValue;
+            int height = int.MaxValue;
 
             int counter = 0;
 
-            while (counter < 3)
+            while (true)
             {
+                counter++;
+
+                int maxX = 0;
+                int maxY = 0;
+
                 foreach (Point point in points)
                 {
                     point.X += point.VelocityX;
                     point.Y += point.VelocityY;
+
+                    if (point.X > maxX)
+                        maxX = point.X;
+
+                    if (point.Y > maxY)
+                        maxY = point.Y;
                 }
 
-                counter++;
+                if (maxY > width || maxX > height)
+                {
+                    Console.WriteLine("Seconds to wait: " + (counter - 1));
 
-                print(points);
+                    foreach (Point point in points)
+                    {
+                        point.X -= point.VelocityX;
+                        point.Y -= point.VelocityY;
+                    }
+
+                    print(points);
+
+                    break;
+                }
+
+                width = maxY;
+                height = maxX;
             }
         }
 
         private static void print(List<Point> points)
         {
+            int minX = points.Min(x => x.X);
             int maxX = points.Max(x => x.X) + 1;
+
+            int minY = points.Min(x => x.Y);
             int maxY = points.Max(x => x.Y) + 1;
 
-            for (int y = 0; y < maxY; y++)
+            for (int y = minY; y < maxY; y++)
             {
-                for (int x = 0; x < maxX; x++)
+                for (int x = minX; x < maxX; x++)
                 {
                     if (points.Any(c => c.X == x && c.Y == y))
                         Console.Write("#");
                     else
                         Console.Write(".");
-
                 }
 
                 Console.WriteLine();
             }
+
+            Console.WriteLine();
         }
 
         public class Point

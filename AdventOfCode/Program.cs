@@ -15,7 +15,8 @@ namespace AdventOfCode
             //ProgramDay07.Run();
             //ProgramDay08.Run();
             //ProgramDay09.Run();
-            ProgramDay10.Run();
+            //ProgramDay10.Run();
+            ProgramDay11.Run();
 
             Console.ReadLine();
         }
