@@ -31,7 +31,7 @@ namespace AdventOfCode
             partOne(7165);
         }
 
-        static void partOne(int gridSerialNumber, int? resultX = null, int? resultY = null)
+        static void partOne(int gridSerialNumber, int? resultX = null, int? resultY = null, int? size = 1)
         {
             int gridSize = 300;
 
@@ -49,53 +49,7 @@ namespace AdventOfCode
                     power = (power / 100) % 10;
                     power -= 5;
 
-                    int totalPower = power;
-
-                    // Sum previous items
-                    if (x > 1)
-                    {
-                        // Left
-                        totalPower += grid[x - 1, y].Power;
-                    }
-
-                    if (y > 1)
-                    {
-                        if (x > 1)
-                        {
-                            // Top left
-                            totalPower += grid[x - 1, y - 1].Power;
-                        }
-
-                        // Top
-                        totalPower += grid[x, y - 1].Power;
-
-                        if (x + 1 <= gridSize)
-                            // Top right
-                            totalPower += grid[x + 1, y - 1].Power;
-                    }
-
-                    // Update previous items
-                    if (x > 1)
-                    {
-                        // Left
-                        grid[x - 1, y].TotalPower += power;
-                    }
-
-                    if (y > 1)
-                    {
-                        if (x > 1)
-                        {
-                            // Top left
-                            grid[x - 1, y - 1].TotalPower += power;
-                        }
-
-                        // Top
-                        grid[x, y - 1].TotalPower += power;
-
-                        if (x + 1 <= gridSize)
-                            // Top right
-                            grid[x + 1, y - 1].TotalPower += power;
-                    }
+                    int totalPower = calculateTotalPower(grid, gridSize, x, y, power, size.Value);
 
                     grid[x, y] = new GridPoint()
                     {
@@ -135,6 +89,45 @@ namespace AdventOfCode
                     Console.WriteLine("X: " + topLeft.X + ", Y: " + topLeft.Y + ", Total power: " + totalPowerHighest.TotalPower);
                 }
             }
+        }
+
+        private static int calculateTotalPower(GridPoint[,] grid, int gridSize, int x, int y, int power, int size)
+        {
+            int totalPower = power;
+
+            if (x > 1)
+            {
+                // Left
+                grid[x - 1, y].TotalPower += power;
+
+                totalPower += grid[x - 1, y].Power;
+            }
+
+            if (y > 1)
+            {
+                if (x > 1)
+                {
+                    // Top left
+                    grid[x - 1, y - 1].TotalPower += power;
+
+                    totalPower += grid[x - 1, y - 1].Power;
+                }
+
+                // Top
+                grid[x, y - 1].TotalPower += power;
+
+                totalPower += grid[x, y - 1].Power;
+
+                if (x + 1 <= gridSize)
+                {
+                    // Top right
+                    grid[x + 1, y - 1].TotalPower += power;
+
+                    totalPower += grid[x + 1, y - 1].Power;
+                }
+            }
+
+            return totalPower;
         }
 
         public class GridPoint
