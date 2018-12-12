@@ -16,22 +16,28 @@ namespace AdventOfCode
             partOne();
             watch.Stop();
             Console.WriteLine($"Done in: {watch.Elapsed.TotalMilliseconds}ms");
+
+            Console.WriteLine("Part two");
+            watch.Restart();
+            partTwo();
+            watch.Stop();
+            Console.WriteLine($"Done in: {watch.Elapsed.TotalMilliseconds}ms");
         }
 
         static void partOne()
         {
-            //partOne(8, 3, 5);
+            partOne(8, 3, 5);
 
-            //partOne(57, 122, 79);
-            //partOne(39, 217, 196);
-            //partOne(71, 101, 153);
+            partOne(57, 122, 79);
+            partOne(39, 217, 196);
+            partOne(71, 101, 153);
 
-            partOne(18);//, 33, 45);
-            partOne(42);//, 21, 61);
+            partOne(18);
+            partOne(42);
             partOne(7165);
         }
 
-        static void partOne(int gridSerialNumber, int? resultX = null, int? resultY = null, int? size = 1)
+        static void partOne(int gridSerialNumber, int? resultX = null, int? resultY = null)
         {
             int gridSize = 300;
 
@@ -49,7 +55,7 @@ namespace AdventOfCode
                     power = (power / 100) % 10;
                     power -= 5;
 
-                    int totalPower = calculateTotalPower(grid, gridSize, x, y, power, size.Value);
+                    int totalPower = partOneCalculateTotalPower(grid, gridSize, x, y, power, 1);
 
                     grid[x, y] = new GridPoint()
                     {
@@ -91,7 +97,7 @@ namespace AdventOfCode
             }
         }
 
-        private static int calculateTotalPower(GridPoint[,] grid, int gridSize, int x, int y, int power, int size)
+        private static int partOneCalculateTotalPower(GridPoint[,] grid, int gridSize, int x, int y, int power, int size)
         {
             int totalPower = power;
 
@@ -128,6 +134,97 @@ namespace AdventOfCode
             }
 
             return totalPower;
+        }
+
+        static void partTwo()
+        {
+            partTwo(18);
+            partTwo(42);
+            partTwo(7165);
+        }
+
+        static void partTwo(int gridSerialNumber)
+        {
+            int gridSize = 300;
+
+            GridPoint[,] grid = new GridPoint[gridSize + 1, gridSize + 1];
+
+            for (int x = 1; x <= gridSize; x++)
+            {
+                for (int y = 1; y <= gridSize; y++)
+                {
+                    int power = x;
+                    power += +10;
+                    power *= y;
+                    power += gridSerialNumber;
+                    power *= (x + 10);
+                    power = (power / 100) % 10;
+                    power -= 5;
+
+                    grid[x, y] = new GridPoint()
+                    {
+                        X = x,
+                        Y = y,
+                        Power = power
+                    };
+                }
+            }
+
+            int resultTotalPower = 0;
+            int resultSize = 0;
+            int resultX = 0;
+            int resultY = 0;
+
+            for (int x = 1; x <= gridSize; x++)
+            {
+                for (int y = 1; y <= gridSize; y++)
+                {
+                    int currentX = x;
+                    int currentY = y;
+
+                    int totalPower = grid[x, y].Power;
+
+                    while (true)
+                    {
+                        currentX += 1;
+                        currentY += 1;
+
+                        if (currentX > gridSize && currentY > gridSize)
+                        {
+                            break;
+                        }
+
+                        if (currentY <= gridSize)
+                        {
+                            for (int x2 = x; x2 <= (currentX > gridSize ? gridSize : currentX); x2++)
+                            {
+                                totalPower += grid[x2, currentY].Power;
+                            }
+                        }
+
+                        if (currentX <= gridSize)
+                        {
+                            for (int y2 = y; y2 <= (currentY > gridSize ? gridSize : currentY) - 1; y2++)
+                            {
+                                totalPower += grid[currentX, y2].Power;
+                            }
+                        }
+
+                        if (totalPower > resultTotalPower)
+                        {
+                            resultTotalPower = totalPower;
+                            resultSize = currentX - x + 1;
+
+                            resultX = x;
+                            resultY = y;
+
+                            Console.WriteLine("#### Serial number: " + gridSerialNumber + ", X: " + resultX + ", Y: " + resultY + ", Size: " + resultSize + ", Total power: " + resultTotalPower);
+                        }
+                    }
+                }
+            }
+
+            Console.WriteLine("Serial number: " + gridSerialNumber + ", X: " + resultX + ", Y: " + resultY + ", Size: " + resultSize + ", Total power: " + resultTotalPower);
         }
 
         public class GridPoint
