@@ -19,28 +19,34 @@ namespace AdventOfCode
             watch.Stop();
             Console.WriteLine($"Done in: {watch.Elapsed.TotalMilliseconds}ms");
 
-            //Console.WriteLine("Part two");
-            //watch.Restart();
-            //partTwo();
-            //watch.Stop();
-            //Console.WriteLine($"Done in: {watch.Elapsed.TotalMilliseconds}ms");
+            Console.WriteLine("Part two");
+            watch.Restart();
+            partTwo();
+            watch.Stop();
+            Console.WriteLine($"Done in: {watch.Elapsed.TotalMilliseconds}ms");
         }
 
         static void partOne()
         {
-            //partOne(parse(initialStateTest), rulesTest.Select(x => new Rule(x)).ToList(), 20);
-            //partOne(parse(initialState), rules.Select(x => new Rule(x)).ToList(), 20);
-
-            //partOne(parse(initialStateTest), rulesTest.Select(x => new Rule(x)).ToList(), 50000000000);
-            partOne(parse(initialState), rules.Select(x => new Rule(x)).ToList(), 50000000000);
+            execute(parse(initialStateTest), rulesTest.Select(x => new Rule(x)).ToList(), 20);
+            execute(parse(initialState), rules.Select(x => new Rule(x)).ToList(), 20);
         }
 
-        private static void partOne(List<bool> pots, List<Rule> list, long iterationAmount)
+        static void partTwo()
         {
-            int zeroPoint = 5000;
+            execute(parse(initialStateTest), rulesTest.Select(x => new Rule(x)).ToList(), 50000000000);
+            execute(parse(initialState), rules.Select(x => new Rule(x)).ToList(), 50000000000);
+        }
 
-            pots.InsertRange(0, Enumerable.Range(0, zeroPoint).Select(x => false).ToList());
-            pots.AddRange(Enumerable.Range(0, zeroPoint).Select(x => false).ToList());
+        private static void execute(List<bool> pots, List<Rule> list, long iterationAmount)
+        {
+            int addOnBegin = 10;
+            int addOnEnd = 150;
+
+            int trendDetectionThreshold = 5;
+
+            pots.InsertRange(0, Enumerable.Range(0, addOnBegin).Select(x => false).ToList());
+            pots.AddRange(Enumerable.Range(0, addOnEnd).Select(x => false).ToList());
 
             int trendCounter = 0;
 
@@ -87,7 +93,7 @@ namespace AdventOfCode
 
                 pots = temp.ToList();
 
-                if (trendCounter >= 100)
+                if (trendCounter >= trendDetectionThreshold)
                 {
                     generation = iteration;
 
@@ -104,7 +110,7 @@ namespace AdventOfCode
                 {
                     amount++;
 
-                    potCounter += i - zeroPoint;
+                    potCounter += i - addOnBegin;
                 }
             }
 
