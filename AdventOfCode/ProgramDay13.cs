@@ -51,135 +51,7 @@ namespace AdventOfCode
                     if (cart.Crashed)
                         continue;
 
-                    GridPoint next;
-
-                    switch (cart.Direction)
-                    {
-                        case CartDirection.Up:
-
-                            cart.Y -= 1;
-
-                            next = grid[cart.X, cart.Y];
-
-                            switch (next)
-                            {
-                                case GridPoint.CornerSlash:
-                                    cart.Direction = CartDirection.Right;
-                                    break;
-                                case GridPoint.CornerBackslash:
-                                    cart.Direction = CartDirection.Left;
-                                    break;
-                                case GridPoint.Intersection:
-
-                                    switch (cart.NextTurn)
-                                    {
-                                        case CartTurn.Left:
-                                            cart.Direction = CartDirection.Left;
-                                            break;
-                                        case CartTurn.Right:
-                                            cart.Direction = CartDirection.Right;
-                                            break;
-                                    }
-
-                                    cart.LatestTurn = cart.NextTurn;
-                                    break;
-                            }
-
-                            break;
-                        case CartDirection.Down:
-
-                            cart.Y += 1;
-
-                            next = grid[cart.X, cart.Y];
-
-                            switch (next)
-                            {
-                                case GridPoint.CornerSlash:
-                                    cart.Direction = CartDirection.Left;
-                                    break;
-                                case GridPoint.CornerBackslash:
-                                    cart.Direction = CartDirection.Right;
-                                    break;
-                                case GridPoint.Intersection:
-
-                                    switch (cart.NextTurn)
-                                    {
-                                        case CartTurn.Left:
-                                            cart.Direction = CartDirection.Right;
-                                            break;
-                                        case CartTurn.Right:
-                                            cart.Direction = CartDirection.Left;
-                                            break;
-                                    }
-
-                                    cart.LatestTurn = cart.NextTurn;
-                                    break;
-                            }
-
-                            break;
-                        case CartDirection.Left:
-
-                            cart.X -= 1;
-
-                            next = grid[cart.X, cart.Y];
-
-                            switch (next)
-                            {
-                                case GridPoint.CornerSlash:
-                                    cart.Direction = CartDirection.Down;
-                                    break;
-                                case GridPoint.CornerBackslash:
-                                    cart.Direction = CartDirection.Up;
-                                    break;
-                                case GridPoint.Intersection:
-
-                                    switch (cart.NextTurn)
-                                    {
-                                        case CartTurn.Left:
-                                            cart.Direction = CartDirection.Down;
-                                            break;
-                                        case CartTurn.Right:
-                                            cart.Direction = CartDirection.Up;
-                                            break;
-                                    }
-
-                                    cart.LatestTurn = cart.NextTurn;
-                                    break;
-                            }
-
-                            break;
-                        case CartDirection.Right:
-
-                            cart.X += 1;
-
-                            next = grid[cart.X, cart.Y];
-
-                            switch (next)
-                            {
-                                case GridPoint.CornerSlash:
-                                    cart.Direction = CartDirection.Up;
-                                    break;
-                                case GridPoint.CornerBackslash:
-                                    cart.Direction = CartDirection.Down;
-                                    break;
-                                case GridPoint.Intersection:
-
-                                    switch (cart.NextTurn)
-                                    {
-                                        case CartTurn.Left:
-                                            cart.Direction = CartDirection.Up;
-                                            break;
-                                        case CartTurn.Right:
-                                            cart.Direction = CartDirection.Down;
-                                            break;
-                                    }
-
-                                    cart.LatestTurn = cart.NextTurn;
-                                    break;
-                            }
-
-                            break;
-                    }
+                    DoMove(grid, cart);
 
                     Cart otherCart = carts.SingleOrDefault(x => x != cart && !x.Crashed && x.X == cart.X && x.Y == cart.Y);
 
@@ -228,135 +100,7 @@ namespace AdventOfCode
                     if (cart.Crashed)
                         continue;
 
-                    GridPoint next;
-
-                    switch (cart.Direction)
-                    {
-                        case CartDirection.Up:
-
-                            cart.Y -= 1;
-
-                            next = grid[cart.X, cart.Y];
-
-                            switch (next)
-                            {
-                                case GridPoint.CornerSlash:
-                                    cart.Direction = CartDirection.Right;
-                                    break;
-                                case GridPoint.CornerBackslash:
-                                    cart.Direction = CartDirection.Left;
-                                    break;
-                                case GridPoint.Intersection:
-
-                                    switch (cart.NextTurn)
-                                    {
-                                        case CartTurn.Left:
-                                            cart.Direction = CartDirection.Left;
-                                            break;
-                                        case CartTurn.Right:
-                                            cart.Direction = CartDirection.Right;
-                                            break;
-                                    }
-
-                                    cart.LatestTurn = cart.NextTurn;
-                                    break;
-                            }
-
-                            break;
-                        case CartDirection.Down:
-
-                            cart.Y += 1;
-
-                            next = grid[cart.X, cart.Y];
-
-                            switch (next)
-                            {
-                                case GridPoint.CornerSlash:
-                                    cart.Direction = CartDirection.Left;
-                                    break;
-                                case GridPoint.CornerBackslash:
-                                    cart.Direction = CartDirection.Right;
-                                    break;
-                                case GridPoint.Intersection:
-
-                                    switch (cart.NextTurn)
-                                    {
-                                        case CartTurn.Left:
-                                            cart.Direction = CartDirection.Right;
-                                            break;
-                                        case CartTurn.Right:
-                                            cart.Direction = CartDirection.Left;
-                                            break;
-                                    }
-
-                                    cart.LatestTurn = cart.NextTurn;
-                                    break;
-                            }
-
-                            break;
-                        case CartDirection.Left:
-
-                            cart.X -= 1;
-
-                            next = grid[cart.X, cart.Y];
-
-                            switch (next)
-                            {
-                                case GridPoint.CornerSlash:
-                                    cart.Direction = CartDirection.Down;
-                                    break;
-                                case GridPoint.CornerBackslash:
-                                    cart.Direction = CartDirection.Up;
-                                    break;
-                                case GridPoint.Intersection:
-
-                                    switch (cart.NextTurn)
-                                    {
-                                        case CartTurn.Left:
-                                            cart.Direction = CartDirection.Down;
-                                            break;
-                                        case CartTurn.Right:
-                                            cart.Direction = CartDirection.Up;
-                                            break;
-                                    }
-
-                                    cart.LatestTurn = cart.NextTurn;
-                                    break;
-                            }
-
-                            break;
-                        case CartDirection.Right:
-
-                            cart.X += 1;
-
-                            next = grid[cart.X, cart.Y];
-
-                            switch (next)
-                            {
-                                case GridPoint.CornerSlash:
-                                    cart.Direction = CartDirection.Up;
-                                    break;
-                                case GridPoint.CornerBackslash:
-                                    cart.Direction = CartDirection.Down;
-                                    break;
-                                case GridPoint.Intersection:
-
-                                    switch (cart.NextTurn)
-                                    {
-                                        case CartTurn.Left:
-                                            cart.Direction = CartDirection.Up;
-                                            break;
-                                        case CartTurn.Right:
-                                            cart.Direction = CartDirection.Down;
-                                            break;
-                                    }
-
-                                    cart.LatestTurn = cart.NextTurn;
-                                    break;
-                            }
-
-                            break;
-                    }
+                    DoMove(grid, cart);
 
                     Cart otherCart = carts.SingleOrDefault(x => x != cart && !x.Crashed && x.X == cart.X && x.Y == cart.Y);
 
@@ -370,6 +114,139 @@ namespace AdventOfCode
             }
 
             Console.WriteLine("Latest cart: " + latestCart.X + ", " + latestCart.Y);
+        }
+
+        private static void DoMove(GridPoint[,] grid, Cart cart)
+        {
+            GridPoint next;
+
+            switch (cart.Direction)
+            {
+                case CartDirection.Up:
+
+                    cart.Y -= 1;
+
+                    next = grid[cart.X, cart.Y];
+
+                    switch (next)
+                    {
+                        case GridPoint.CornerSlash:
+                            cart.Direction = CartDirection.Right;
+                            break;
+                        case GridPoint.CornerBackslash:
+                            cart.Direction = CartDirection.Left;
+                            break;
+                        case GridPoint.Intersection:
+
+                            switch (cart.NextTurn)
+                            {
+                                case CartTurn.Left:
+                                    cart.Direction = CartDirection.Left;
+                                    break;
+                                case CartTurn.Right:
+                                    cart.Direction = CartDirection.Right;
+                                    break;
+                            }
+
+                            cart.LatestTurn = cart.NextTurn;
+                            break;
+                    }
+
+                    break;
+                case CartDirection.Down:
+
+                    cart.Y += 1;
+
+                    next = grid[cart.X, cart.Y];
+
+                    switch (next)
+                    {
+                        case GridPoint.CornerSlash:
+                            cart.Direction = CartDirection.Left;
+                            break;
+                        case GridPoint.CornerBackslash:
+                            cart.Direction = CartDirection.Right;
+                            break;
+                        case GridPoint.Intersection:
+
+                            switch (cart.NextTurn)
+                            {
+                                case CartTurn.Left:
+                                    cart.Direction = CartDirection.Right;
+                                    break;
+                                case CartTurn.Right:
+                                    cart.Direction = CartDirection.Left;
+                                    break;
+                            }
+
+                            cart.LatestTurn = cart.NextTurn;
+                            break;
+                    }
+
+                    break;
+                case CartDirection.Left:
+
+                    cart.X -= 1;
+
+                    next = grid[cart.X, cart.Y];
+
+                    switch (next)
+                    {
+                        case GridPoint.CornerSlash:
+                            cart.Direction = CartDirection.Down;
+                            break;
+                        case GridPoint.CornerBackslash:
+                            cart.Direction = CartDirection.Up;
+                            break;
+                        case GridPoint.Intersection:
+
+                            switch (cart.NextTurn)
+                            {
+                                case CartTurn.Left:
+                                    cart.Direction = CartDirection.Down;
+                                    break;
+                                case CartTurn.Right:
+                                    cart.Direction = CartDirection.Up;
+                                    break;
+                            }
+
+                            cart.LatestTurn = cart.NextTurn;
+                            break;
+                    }
+
+                    break;
+                case CartDirection.Right:
+
+                    cart.X += 1;
+
+                    next = grid[cart.X, cart.Y];
+
+                    switch (next)
+                    {
+                        case GridPoint.CornerSlash:
+                            cart.Direction = CartDirection.Up;
+                            break;
+                        case GridPoint.CornerBackslash:
+                            cart.Direction = CartDirection.Down;
+                            break;
+                        case GridPoint.Intersection:
+
+                            switch (cart.NextTurn)
+                            {
+                                case CartTurn.Left:
+                                    cart.Direction = CartDirection.Up;
+                                    break;
+                                case CartTurn.Right:
+                                    cart.Direction = CartDirection.Down;
+                                    break;
+                            }
+
+                            cart.LatestTurn = cart.NextTurn;
+                            break;
+                    }
+
+                    break;
+            }
         }
 
         static Tuple<GridPoint[,], List<Cart>> parse(string[] input)
