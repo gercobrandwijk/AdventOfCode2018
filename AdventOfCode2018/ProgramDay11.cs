@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace AdventOfCode
+namespace AdventOfCode2018
 {
     public class ProgramDay11
     {

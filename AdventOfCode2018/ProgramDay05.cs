@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace AdventOfCode
+namespace AdventOfCode2018
 {
     public class ProgramDay05
     {

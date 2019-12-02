@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 
-namespace AdventOfCode
+namespace AdventOfCode2018
 {
     public class ProgramDay04
     {

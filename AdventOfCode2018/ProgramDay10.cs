@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace AdventOfCode
+namespace AdventOfCode2018
 {
     public class ProgramDay10
     {
