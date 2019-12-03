@@ -13,7 +13,7 @@ namespace AdventOfCode2019
         static int centerPointY;
         static int currentX;
         static int currentY;
-        static Field[][] board;
+        static Dictionary<string, Field> board;
 
         static int nearestCrossDistanceManhattan = size * 2;
         static int nearestCrossDistanceSteps = size * 2;
@@ -28,13 +28,12 @@ namespace AdventOfCode2019
             Move[] moves1 = lines[0].Split(',').Select(x => new Move(x)).ToArray();
             Move[] moves2 = lines[1].Split(',').Select(x => new Move(x)).ToArray();
 
-            board = new Field[size][];
+            board = new Dictionary<string, Field>(); ;
 
             centerPointX = size / 2;
             centerPointY = size / 2;
 
-            board[centerPointX] = new Field[size];
-            board[centerPointX][centerPointY] = new Field()
+            board[centerPointX + "_" + centerPointY] = new Field()
             {
                 Type = FieldType.CenterPoint
             };
@@ -62,9 +61,9 @@ namespace AdventOfCode2019
                 {
                     char character;
 
-                    if (board[j][i] != null)
+                    if (board.ContainsKey(j + "_" + i))
                     {
-                        switch (board[j][i].Type)
+                        switch (board[j + "_" + i].Type)
                         {
                             case FieldType.Empty:
                                 character = ' ';
@@ -168,13 +167,12 @@ namespace AdventOfCode2019
 
         private static void setPoint(int lineNumber, bool upOrDown, int x, int y, int stepAmount)
         {
-            if (board[x] == null)
-                board[x] = new Field[size];
+            string key = x + "_" + y;
 
-            if (board[x][y] == null)
-                board[x][y] = new Field();
+            if (!board.ContainsKey(key))
+                board[key] = new Field();
 
-            Field field = board[x][y];
+            Field field = board[key];
 
             if (field.Type == FieldType.LineVertical || field.Type == FieldType.LineHorizontal)
             {
@@ -189,13 +187,12 @@ namespace AdventOfCode2019
                         nearestCrossDistanceManhattan = distanceManhattan;
                 }
             }
-            else if (upOrDown)
-            {
-                field.Type = FieldType.LineVertical;
-            }
             else
             {
-                field.Type = FieldType.LineHorizontal;
+                if (upOrDown)
+                    field.Type = FieldType.LineVertical;
+                else
+                    field.Type = FieldType.LineHorizontal;
             }
 
             if (!field.Line1Hit && lineNumber == 1)
