@@ -26,8 +26,6 @@ namespace AdventOfCode2019
             //fuelsPart2.ForEach(x => Console.WriteLine(x));
 
             Console.WriteLine("Part 2: " + fuelsPart2.Sum());
-
-            Console.ReadLine();
         }
 
         public static int part1Calculate(int input)

@@ -53,8 +53,6 @@ namespace AdventOfCode2019
 
                 Console.WriteLine("Part 2: " + (100 * noun + verb));
             }
-
-            Console.ReadLine();
         }
 
         private static void calculate(int[] numbers)
