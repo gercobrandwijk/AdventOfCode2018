@@ -27,6 +27,12 @@ namespace AdventOfCode2019
             Console.WriteLine("Done in " + stopwatch.ElapsedMilliseconds + "ms");
             Console.WriteLine();
 
+            stopwatch.Reset();
+            stopwatch.Start();
+            Day04.Run();
+            Console.WriteLine("Done in " + stopwatch.ElapsedMilliseconds + "ms");
+            Console.WriteLine();
+
             Console.ReadLine();
         }
     }
