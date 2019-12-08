@@ -6,8 +6,12 @@ using System.Text;
 
 namespace AdventOfCode2019
 {
-    public static class Day03
+    public class Day03 : AdventOfCodeDay
     {
+        public Day03(int number) : base(number)
+        {
+        }
+
         static int size = 17000;
         static int centerPointX;
         static int centerPointY;
@@ -18,12 +22,12 @@ namespace AdventOfCode2019
         static int nearestCrossDistanceManhattan = size * 2;
         static int nearestCrossDistanceSteps = size * 2;
 
-        public static void Run()
+        public override void Run()
         {
-            string[] lines = File.ReadAllLines("Day03.txt");
-            //string[] lines = File.ReadAllLines("Day03Part1Example1.txt");
-            //string[] lines = File.ReadAllLines("Day03Part1Example2.txt");
-            //string[] lines = File.ReadAllLines("Day03Part1Example3.txt");
+            string[] lines = File.ReadAllLines("Data/Day03.txt");
+            //string[] lines = File.ReadAllLines("Data/Day03Part1Example1.txt");
+            //string[] lines = File.ReadAllLines("Data/Day03Part1Example2.txt");
+            //string[] lines = File.ReadAllLines("Data/Day03Part1Example3.txt");
 
             Move[] moves1 = lines[0].Split(',').Select(x => new Move(x)).ToArray();
             Move[] moves2 = lines[1].Split(',').Select(x => new Move(x)).ToArray();
@@ -49,7 +53,7 @@ namespace AdventOfCode2019
             Console.WriteLine("Part 2: " + nearestCrossDistanceSteps);
         }
 
-        public static void writeBoardToFile()
+        public void writeBoardToFile()
         {
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -98,7 +102,7 @@ namespace AdventOfCode2019
             File.WriteAllText("day03board.txt", stringBuilder.ToString(), Encoding.UTF8);
         }
 
-        public static void doMoves(Move[] moves, int lineNumber)
+        public void doMoves(Move[] moves, int lineNumber)
         {
             currentX = centerPointX;
             currentY = centerPointY;

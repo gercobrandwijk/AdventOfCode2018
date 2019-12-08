@@ -6,9 +6,13 @@ using System.Text;
 
 namespace AdventOfCode2019
 {
-    public static class Day04
+    public class Day04 : AdventOfCodeDay
     {
-        public static void Run()
+        public Day04(int number) : base(number)
+        {
+        }
+
+        public override void Run()
         {
             bool part1Test1 = IsValidPart1("111111") == true;
             bool part1Test2 = IsValidPart1("223450") == false;
@@ -44,7 +48,7 @@ namespace AdventOfCode2019
             Console.WriteLine("Part 2: " + validCount);
         }
 
-        public static bool IsValidPart1(string input)
+        public bool IsValidPart1(string input)
         {
             int[] numbers = input.ToCharArray().Select(x => (int)(x - 48)).ToArray();
 
@@ -70,7 +74,7 @@ namespace AdventOfCode2019
             return hasDouble;
         }
 
-        public static bool IsValidPart2(string input)
+        public bool IsValidPart2(string input)
         {
             int[] numbers = input.ToCharArray().Select(x => (int)(x - 48)).ToArray();
 

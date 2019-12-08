@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using static AdventOfCode2019.Program;
 
 namespace AdventOfCode2019
 {
-    public static class Day01
+    public class Day01 : AdventOfCodeDay
     {
-        public static void Run()
+        public Day01(int number) : base(number)
         {
-            string[] lines = File.ReadAllLines("Day01.txt");
-            //string[] lines = File.ReadAllLines("Day01Part1Example.txt");
-            //string[] lines = File.ReadAllLines("Day01Part2Example.txt");
+        }
+
+        public override void Run()
+        {
+            string[] lines = File.ReadAllLines("Data/Day01.txt");
+            //string[] lines = File.ReadAllLines("Data/Day01Part1Example.txt");
+            //string[] lines = File.ReadAllLines("Data/Day01Part2Example.txt");
 
             List<int> numbers = lines.Select(x => int.Parse(x)).ToList();
             List<int> fuelsPart1 = numbers.Select(x => part1Calculate(x)).ToList();
@@ -28,12 +33,12 @@ namespace AdventOfCode2019
             Console.WriteLine("Part 2: " + fuelsPart2.Sum());
         }
 
-        public static int part1Calculate(int input)
+        public int part1Calculate(int input)
         {
             return ((int)(input / 3)) - 2;
         }
 
-        public static int part2Calculate(int input)
+        public int part2Calculate(int input)
         {
             int output = ((int)(input / 3)) - 2;
 

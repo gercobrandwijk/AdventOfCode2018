@@ -6,12 +6,16 @@ using System.Text;
 
 namespace AdventOfCode2019
 {
-    public static class Day02
+    public class Day02 : AdventOfCodeDay
     {
-        public static void Run()
+        public Day02(int number) : base(number)
         {
-            string[] lines = File.ReadAllLines("Day02.txt");
-            //string[] lines = File.ReadAllLines("Day02Part1Example.txt");
+        }
+
+        public override void Run()
+        {
+            string[] lines = File.ReadAllLines("Data/Day02.txt");
+            //string[] lines = File.ReadAllLines("Data/Day02Part1Example.txt");
 
             int[] numbers;
             int[] numbersClone;
