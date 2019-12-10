@@ -20,9 +20,9 @@ namespace AdventOfCode2019
 
         public void RunPart1()
         {
-            string[] lines = File.ReadAllLines("Data/Day05Part1.txt");
+            string[] lines = File.ReadAllLines("Data/Day07.txt");
 
-            string line = lines[1];
+            string line = lines[0];
 
             int[] numbers;
 

@@ -10,7 +10,7 @@ namespace AdventOfCode2019
         {
             Stopwatch stopwatch = new Stopwatch();
 
-            int runOnlyDay = 10;
+            int runOnlyDay = 07;
 
             List<IAdventOfCodeDay> days = new List<IAdventOfCodeDay>() {
                 new Day01(01),
