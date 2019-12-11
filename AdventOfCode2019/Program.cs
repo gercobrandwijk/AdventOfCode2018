@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace AdventOfCode2019
 {
@@ -10,7 +11,7 @@ namespace AdventOfCode2019
         {
             Stopwatch stopwatch = new Stopwatch();
 
-            int runOnlyDay = 07;
+            int runOnlyDay = 7;
 
             List<IAdventOfCodeDay> days = new List<IAdventOfCodeDay>() {
                 new Day01(01),
@@ -21,12 +22,12 @@ namespace AdventOfCode2019
                 new Day06(06),
                 new Day07(07),
                 new Day08(08),
-                new Day09(09),
+                //new Day09(09),
                 new Day10(10),
             };
 
             if (runOnlyDay != 0)
-                days = new List<IAdventOfCodeDay>() { days[runOnlyDay - 1] };
+                days = days.Where(x => x.Number == runOnlyDay).ToList();
 
             foreach (IAdventOfCodeDay day in days)
             {
