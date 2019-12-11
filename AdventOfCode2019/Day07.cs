@@ -89,11 +89,11 @@ namespace AdventOfCode2019
 
             Dictionary<int, AmplifierPart2> amplifiers = new Dictionary<int, AmplifierPart2>();
 
-            IEnumerable<IEnumerable<int>> allPhaseCombinations = this.GetPermutations(Enumerable.Range(0, amplifierAmount));
+            IEnumerable<IEnumerable<int>> allPhaseCombinations = this.GetPermutations(Enumerable.Range(5, amplifierAmount));
 
-            // Example 1: 139629729
-            numbers = "3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5".Split(',').Select(x => int.Parse(x)).ToArray();
-            allPhaseCombinations = new List<List<int>>() { new List<int>() { 9, 8, 7, 6, 5 } };
+            //// Example 1: 139629729
+            //numbers = "3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5".Split(',').Select(x => int.Parse(x)).ToArray();
+            //allPhaseCombinations = new List<List<int>>() { new List<int>() { 9, 8, 7, 6, 5 } };
             //// Example 2: 18216
             //numbers = "3,52,1001,52,-5,52,3,53,1,52,56,54,1007,54,5,55,1005,55,26,1001,54,-5,54,1105,1,12,1,53,54,53,1008,54,0,55,1001,55,1,55,2,53,55,53,4,53,1001,56,-1,56,1005,56,6,99,0,0,0,0,10".Split(',').Select(x => int.Parse(x)).ToArray();
             //allPhaseCombinations = new List<List<int>>() { new List<int>() { 9, 7, 8, 5, 6 } };
@@ -128,27 +128,25 @@ namespace AdventOfCode2019
                     amplifiers[amplifierAndPhaseIndex].AddInput(phases[amplifierAndPhaseIndex]);
                 }
 
-                int input = 0;
                 bool executeNext = true;
+
+                int input = 0;
+                amplifiers[0].AddInput(input);
 
                 while (executeNext)
                 {
                     for (int amplifierAndPhaseIndex = 0; amplifierAndPhaseIndex < amplifierAmount; amplifierAndPhaseIndex++)
                     {
-                        amplifiers[amplifierAndPhaseIndex].AddInput(input);
                         executeNext = amplifiers[amplifierAndPhaseIndex].Calculate();
 
                         input = amplifiers[amplifierAndPhaseIndex].Output;
 
                         if (!executeNext)
-                        {
-                            Console.WriteLine("Halted at " + amplifiers[amplifierAndPhaseIndex].Name);
                             break;
-                        }
+
+                        amplifiers[amplifierAndPhaseIndex].Next.AddInput(input);
                     }
                 }
-
-                Console.WriteLine("Phase " + (phaseIndex + 1) + " of " + allPhaseCombinationsList.Count + ": " + amplifiers[4].Output);
 
                 if (amplifiers[4].Output > highestOutput)
                     highestOutput = amplifiers[4].Output;
@@ -331,10 +329,7 @@ namespace AdventOfCode2019
                     }
                     else if (operationCode == 3)
                     {
-                        if (this.InputIndex + 1 > this.Inputs.Count)
-                            throw new NotSupportedException();
-
-                        numbers[numbers[i + 1]] = this.Inputs[this.InputIndex];
+                        numbers[numbers[i + 1]] = this.Inputs[this.InputIndex % this.Inputs.Count];
 
                         this.InputIndex++;
 
