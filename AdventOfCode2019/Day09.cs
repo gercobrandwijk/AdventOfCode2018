@@ -14,7 +14,7 @@ namespace AdventOfCode2019
 
         public override void Run()
         {
-            //RunPart1();
+            RunPart1();
             RunPart2();
         }
 
