@@ -3,33 +3,34 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AdventOfCode2019
 {
-    public class Day11 : AdventOfCodeDay
+    public class Day13 : AdventOfCodeDay
     {
-        int size = 150;
+        int size = 40;
         int[,] board;
-        int positionX;
-        int positionY;
-        Direction direction = Direction.Up;
-        int panelCounter = 1;
         Amplifier amplifier;
+        int amountOfBlocks;
+        int score;
+        int paddleX;
+        int paddleY;
+        int ballX;
+        int ballY;
+        int writeLineNumber;
 
-        public Day11(int number) : base(number)
+        public Day13(int number) : base(number)
         {
             board = new int[size, size];
             for (int y = 0; y < size; y++)
             {
                 for (int x = 0; x < size; x++)
                 {
-                    board[x, y] = -1;
+                    board[x, y] = 0;
                 }
             }
-            positionX = size / 4;
-            positionY = size / 2;
-            board[positionX, positionY] = 0;
         }
 
         public override async Task Run()
@@ -40,7 +41,7 @@ namespace AdventOfCode2019
 
         public void RunPart1()
         {
-            string[] lines = File.ReadAllLines("Data/Day11.txt");
+            string[] lines = File.ReadAllLines("Data/Day13.txt");
 
             string line = lines[0];
 
@@ -49,23 +50,25 @@ namespace AdventOfCode2019
             numbers = line.Split(',').Select(x => Int64.Parse(x)).ToArray();
             Array.Resize(ref numbers, numbers.Length * 10);
 
-            amplifier = new Amplifier('A', numbers);
+            amplifier = new Amplifier('A', numbers, this);
+            writeLineNumber = Console.CursorTop;
 
             while (!amplifier.IsDone)
             {
-                this.amplifier.Inputs.Add(board[positionX, positionY] == 1 ? 1 : 0);
                 var instructions = amplifier.Calculate();
 
                 if (!amplifier.IsDone)
                     doMove(instructions);
             }
 
-            Console.WriteLine("Part 1: " + panelCounter);
+            Console.WriteLine("Part 1: " + amountOfBlocks);
+
+            //this.print();
         }
 
         public void RunPart2()
         {
-            string[] lines = File.ReadAllLines("Data/Day11.txt");
+            string[] lines = File.ReadAllLines("Data/Day13.txt");
 
             string line = lines[0];
 
@@ -73,118 +76,165 @@ namespace AdventOfCode2019
 
             numbers = line.Split(',').Select(x => Int64.Parse(x)).ToArray();
             Array.Resize(ref numbers, numbers.Length * 10);
+            numbers[0] = 2;
 
-            Console.WriteLine("Part 2: ");
-
-            for (int y = 0; y < size; y++)
-            {
-                for (int x = 0; x < size; x++)
-                {
-                    board[x, y] = 1;
-                }
-            }
-
-            amplifier = new Amplifier('A', numbers);
+            amplifier = new Amplifier('A', numbers, this);
+            writeLineNumber = Console.CursorTop;
 
             while (!amplifier.IsDone)
             {
-                this.amplifier.Inputs.Add(board[positionX, positionY] == 1 ? 1 : 0);
                 var instructions = amplifier.Calculate();
 
                 if (!amplifier.IsDone)
                     doMove(instructions);
             }
 
-            for (int y = 0; y < size; y++)
+            Console.WriteLine("Part 2: " + score);
+
+            //this.print();
+        }
+
+        private void print()
+        {
+            Console.SetCursorPosition(0, writeLineNumber);
+            for (int y = 0; y < 30; y++)
             {
+                string line = "";
                 for (int x = 0; x < size; x++)
                 {
-                    Console.Write(board[x, y] == 1 ? " " : "X");
+                    char value = ' ';
+
+                    switch (board[x, y])
+                    {
+                        case 1:
+                            value = '|';
+                            break;
+                        case 2:
+                            value = '#';
+                            break;
+                        case 3:
+                            value = '-';
+                            break;
+                        case 4:
+                            value = '0';
+                            break;
+                    }
+
+                    line += value;
                 }
 
-                Console.WriteLine();
+                Console.WriteLine(line);
             }
         }
 
         public void doMove(int[] instructions)
         {
-            int colorToPaint = instructions[0];
-            bool moveLeft = instructions[1] == 0;
+            int x = instructions[0];
+            int y = instructions[1];
+            int tileId = instructions[2];
 
-            // Not painted yet
-            if (board[positionX, positionY] == -1)
-                panelCounter++;
-
-            board[positionX, positionY] = colorToPaint;
-
-            if (moveLeft)
+            if (x == -1 && y == 0)
             {
-                switch (direction)
-                {
-                    case Direction.Up:
-                        direction = Direction.Left;
-                        positionX -= 1;
-                        break;
-                    case Direction.Down:
-                        direction = Direction.Right;
-                        positionX += 1;
-                        break;
-                    case Direction.Left:
-                        direction = Direction.Down;
-                        positionY += 1;
-                        break;
-                    case Direction.Right:
-                        direction = Direction.Up;
-                        positionY -= 1;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else
-            {
-                switch (direction)
-                {
-                    case Direction.Up:
-                        direction = Direction.Right;
-                        positionX += 1;
-                        break;
-                    case Direction.Down:
-                        direction = Direction.Left;
-                        positionX -= 1;
-                        break;
-                    case Direction.Left:
-                        direction = Direction.Up;
-                        positionY -= 1;
-                        break;
-                    case Direction.Right:
-                        direction = Direction.Down;
-                        positionY += 1;
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
+                score = tileId;
 
-        public enum Direction
-        {
-            Up,
-            Down,
-            Left,
-            Right
+                return;
+            }
+
+            switch (tileId)
+            {
+                case 0: // empty
+                    break;
+                case 1: // wall
+                    board[x, y] = 1;
+                    break;
+                case 2: // block
+                    board[x, y] = 2;
+                    amountOfBlocks++;
+                    break;
+                case 3: // paddle
+                    if (board[paddleX, paddleY] == 3)
+                        board[paddleX, paddleY] = 0;
+
+                    paddleX = x;
+                    paddleY = y;
+
+                    board[paddleX, paddleY] = 3;
+                    break;
+                case 4: // ball
+
+                    if (board[ballX, ballY] == 4)
+                        board[ballX, ballY] = 0;
+
+                    bool movingLeftTop = x < ballX && y < ballY;
+                    bool movingRightTop = x > ballX && y < ballY;
+                    bool movingLeftDown = x > ballX && y > ballY;
+                    bool movingRightDown = x < ballX && y > ballY;
+
+                    ballX = x;
+                    ballY = y;
+
+                    if (movingLeftTop || movingRightTop)
+                    {
+                        if (board[ballX, ballY - 1] == 2)
+                        {
+                            board[ballX, ballY - 1] = 0;
+                        }
+                    }
+                    else if (movingLeftDown || movingRightDown)
+                    {
+                        if (board[ballX, ballY + 1] == 2)
+                        {
+                            board[ballX, ballY + 1] = 0;
+                        }
+                    }
+                    else if (movingLeftTop)
+                    {
+                        if (board[ballX - 1, ballY - 1] == 2)
+                        {
+                            board[ballX - 1, ballY - 1] = 0;
+                        }
+                    }
+                    else if (movingRightTop)
+                    {
+                        if (board[ballX + 1, ballY - 1] == 2)
+                        {
+                            board[ballX + 1, ballY - 1] = 0;
+                        }
+                    }
+                    else if (movingLeftDown)
+                    {
+                        if (board[ballX - 1, ballY + 1] == 2)
+                        {
+                            board[ballX - 1, ballY + 1] = 0;
+                        }
+                    }
+                    else if (movingRightDown)
+                    {
+                        if (board[ballX + 1, ballY + 1] == 2)
+                        {
+                            board[ballX + 1, ballY + 1] = 0;
+                        }
+                    }
+
+                    board[ballX, ballY] = 4;
+
+                    break;
+            }
         }
 
         public class Amplifier
         {
-            public Amplifier(char name, Int64[] numbers)
+            public Amplifier(char name, Int64[] numbers, Day13 program)
             {
                 this.Name = name;
                 this.NumbersBase = (Int64[])numbers.Clone();
+                this.Program = program;
             }
 
             public char Name { get; }
             public Int64[] NumbersBase { get; }
+            public Day13 Program { get; }
+
             public bool IsDone { get; set; }
 
             public List<Int64> Outputs { get; set; } = new List<long>();
@@ -235,9 +285,7 @@ namespace AdventOfCode2019
                     {
                         var param = getParams(numbers, i, paramModes, 1);
 
-                        this.writeAddress(numbers, param[0].Address, this.Inputs[this.InputIndex]);
-
-                        this.InputIndex++;
+                        this.writeAddress(numbers, param[0].Address, this.Program.ballX > this.Program.paddleX ? 1 : this.Program.ballX < this.Program.paddleX ? -1 : 0);
 
                         i += 1;
                     }
@@ -247,7 +295,7 @@ namespace AdventOfCode2019
 
                         this.Outputs.Add(param[0].Value);
 
-                        if (this.Outputs.Count % 2 == 0)
+                        if (this.Outputs.Count % 3 == 0)
                         {
                             newInstructions = true;
 
@@ -316,10 +364,11 @@ namespace AdventOfCode2019
 
                 if (newInstructions)
                 {
-                    var outputs = new int[2];
+                    var outputs = new int[3];
 
-                    outputs[0] = (int)this.Outputs[this.Outputs.Count - 2];
-                    outputs[1] = (int)this.Outputs[this.Outputs.Count - 1];
+                    outputs[0] = (int)this.Outputs[this.Outputs.Count - 3];
+                    outputs[1] = (int)this.Outputs[this.Outputs.Count - 2];
+                    outputs[2] = (int)this.Outputs[this.Outputs.Count - 1];
 
                     return outputs;
                 }

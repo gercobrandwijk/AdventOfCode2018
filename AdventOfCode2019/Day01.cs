@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using static AdventOfCode2019.Program;
 
 namespace AdventOfCode2019
@@ -13,7 +14,7 @@ namespace AdventOfCode2019
         {
         }
 
-        public override void Run()
+        public override async Task Run()
         {
             string[] lines = File.ReadAllLines("Data/Day01.txt");
             //string[] lines = File.ReadAllLines("Data/Day01Part1Example.txt");

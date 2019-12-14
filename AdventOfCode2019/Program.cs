@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AdventOfCode2019
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
+            Stopwatch stopwatchAll = new Stopwatch();
             Stopwatch stopwatch = new Stopwatch();
 
-            int runOnlyDay = 12;
+            int runOnlyDay = 0;
 
             List<IAdventOfCodeDay> days = new List<IAdventOfCodeDay>() {
                 new Day01(01),
@@ -26,20 +28,27 @@ namespace AdventOfCode2019
                 new Day10(10),
                 new Day11(11),
                 new Day12(12),
+                new Day13(13),
+                new Day14(14),
             };
 
             if (runOnlyDay != 0)
                 days = days.Where(x => x.Number == runOnlyDay).ToList();
 
+            stopwatchAll.Reset();
+            stopwatchAll.Start();
             foreach (IAdventOfCodeDay day in days)
             {
                 Console.WriteLine("Day " + day.Number);
                 stopwatch.Reset();
                 stopwatch.Start();
-                day.Run();
+                await day.Run();
                 Console.WriteLine("Done in " + stopwatch.ElapsedMilliseconds + "ms");
                 Console.WriteLine();
             }
+
+            if (runOnlyDay == 0)
+                Console.WriteLine("ALL DONE IN: " + stopwatchAll.ElapsedMilliseconds + "ms");
 
             Console.ReadLine();
         }
@@ -48,7 +57,7 @@ namespace AdventOfCode2019
     {
         int Number { get; }
 
-        void Run();
+        Task Run();
     }
 
     public abstract class AdventOfCodeDay : IAdventOfCodeDay
@@ -60,7 +69,7 @@ namespace AdventOfCode2019
             this.Number = number;
         }
 
-        public abstract void Run();
+        public abstract Task Run();
     }
 
 }

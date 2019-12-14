@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace AdventOfCode2019
 {
@@ -22,7 +23,7 @@ namespace AdventOfCode2019
         static int nearestCrossDistanceManhattan = size * 2;
         static int nearestCrossDistanceSteps = size * 2;
 
-        public override void Run()
+        public override async Task Run()
         {
             string[] lines = File.ReadAllLines("Data/Day03.txt");
             //string[] lines = File.ReadAllLines("Data/Day03Part1Example1.txt");
