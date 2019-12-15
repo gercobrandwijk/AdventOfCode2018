@@ -95,14 +95,16 @@ namespace AdventOfCode2019
                     doMove(instructions);
             }
 
-            for (int y = 0; y < size; y++)
+            for (int y = 68; y < 107; y++)
             {
-                for (int x = 0; x < size; x++)
+                string writeLine = "";
+
+                for (int x = 70; x < 76; x++)
                 {
-                    Console.Write(board[x, y] == 1 ? " " : "X");
+                    writeLine += board[x, y] == 1 ? "X" : " ";
                 }
 
-                Console.WriteLine();
+                Console.WriteLine(writeLine);
             }
         }
 

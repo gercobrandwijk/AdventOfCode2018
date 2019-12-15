@@ -29,7 +29,7 @@ namespace AdventOfCode2019
 
         public override async Task Run()
         {
-            //RunPart1()
+            RunPart1();
             RunPart2();
         }
 
@@ -52,20 +52,12 @@ namespace AdventOfCode2019
             {
                 this.Step(moons);
 
-                //Console.WriteLine("After " + (i + 1) + " steps:");
-
                 totalEnergy = 0;
 
                 foreach (Moon moon in moons)
                 {
-                    //Console.WriteLine(moon.ToString());
-
                     totalEnergy += moon.Energy;
                 }
-
-                //Console.WriteLine("Energy: " + totalEnergy);
-
-                //Console.WriteLine();
             }
 
             Console.WriteLine("Part 1: " + totalEnergy);
