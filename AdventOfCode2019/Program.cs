@@ -13,7 +13,7 @@ namespace AdventOfCode2019
             Stopwatch stopwatchAll = new Stopwatch();
             Stopwatch stopwatch = new Stopwatch();
 
-            int runOnlyDay = 0;
+            int runOnlyDay = 16;
 
             List<IAdventOfCodeDay> days = new List<IAdventOfCodeDay>() {
                 new Day01(01),
@@ -31,6 +31,7 @@ namespace AdventOfCode2019
                 new Day13(13),
                 new Day14(14),
                 new Day15(15),
+                new Day16(16),
             };
 
             if (runOnlyDay != 0)
