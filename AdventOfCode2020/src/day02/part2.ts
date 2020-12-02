@@ -1,5 +1,6 @@
 import * as fs from "fs";
 import * as _ from "lodash";
+import * as consola from "consola";
 
 //let input = fs.readFileSync("src/day02/_test.txt", { encoding: "utf8" });
 let input = fs.readFileSync("src/day02/_input.txt", { encoding: "utf8" });
@@ -17,16 +18,24 @@ let rows = input.split("\n").map((x) => {
   };
 });
 
-let passwordValidCount = 0;
+let answer = 0;
 
 for (let row of rows) {
   let characters = row.value.split("");
 
   if (characters[row.pos1 - 1] === row.character) {
-    if (characters[row.pos2 - 1] !== row.character) passwordValidCount++;
+    if (characters[row.pos2 - 1] !== row.character) answer++;
   } else if (characters[row.pos2 - 1] === row.character) {
-    if (characters[row.pos1 - 1] !== row.character) passwordValidCount++;
+    if (characters[row.pos1 - 1] !== row.character) answer++;
   }
 }
 
-console.log(passwordValidCount);
+consola.default.info("Answer: " + answer);
+
+let validAnswer = 491;
+
+validAnswer
+  ? answer === validAnswer
+    ? consola.default.success("Valid")
+    : consola.default.error("Not valid anymore, answer must be " + validAnswer)
+  : consola.default.warn("No valid answer known yet");
