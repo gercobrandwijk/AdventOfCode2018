@@ -1,11 +1,13 @@
 # AdventOfCode
 
 *History:*
+
 2018: Reached day 14! (C#)
 
 2019: Reached day 15, There is progress! (C#)
 
 *Now:*
+
 2020: Till day 16? (TypeScript, NodeJS)
 
 *Forecast:*
