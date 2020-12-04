@@ -4,7 +4,7 @@ import * as consola from "consola";
 
 var time = new Date();
 
-let day = "02";
+let day = "04";
 
 // let input = fs.readFileSync("src/day" + day + "/_test.txt", {
 //   encoding: "utf8",
@@ -13,31 +13,39 @@ let input = fs.readFileSync("src/day" + day + "/_input.txt", {
   encoding: "utf8",
 });
 
-let rows = input.split("\n").map((x) => {
-  let parts = x.split(":");
+let items = input.split("\r\n\r\n");
 
-  let ruleParts = parts[0].split(" ");
-
-  return {
-    character: ruleParts[1],
-    min: parseInt(ruleParts[0].split("-")[0], 10),
-    max: parseInt(ruleParts[0].split("-")[1], 10),
-    value: parts[1].trim(),
-  };
+items = items.map((item) => {
+  return item.replace(/(?:\r\n|\r|\n)/g, " ");
 });
 
-let answer = 0;
+let passports: { [key: string]: string }[] = items.map((x) => {
+  let entryItems = x.split(" ");
 
-for (let row of rows) {
-  let characterAmount = row.value.split("").filter((x) => x === row.character)
-    .length;
+  return entryItems
+    .map((x) => {
+      return { key: x.split(":")[0], value: x.split(":")[1] };
+    })
+    .reduce((a, x) => ({ ...a, [x.key]: x.value }), {});
+});
 
-  if (characterAmount >= row.min && characterAmount <= row.max) answer++;
-}
+let validPasswords = passports.filter((x) => {
+  delete x.cid;
+
+  let keys = Object.keys(x);
+
+  if (keys.length !== 7) {
+    return false;
+  }
+
+  return true;
+});
+
+let answer = validPasswords.length;
 
 consola.default.info("Answer: " + answer);
 
-let validAnswer = 445;
+let validAnswer = 256;
 
 validAnswer
   ? answer === validAnswer

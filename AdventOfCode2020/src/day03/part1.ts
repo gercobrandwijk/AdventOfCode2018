@@ -4,7 +4,7 @@ import * as consola from "consola";
 
 var time = new Date();
 
-let day = "02";
+let day = "03";
 
 // let input = fs.readFileSync("src/day" + day + "/_test.txt", {
 //   encoding: "utf8",
@@ -13,31 +13,41 @@ let input = fs.readFileSync("src/day" + day + "/_input.txt", {
   encoding: "utf8",
 });
 
-let rows = input.split("\n").map((x) => {
-  let parts = x.split(":");
+let map = input.split("\r\n").map((x) => x.split(""));
 
-  let ruleParts = parts[0].split(" ");
-
-  return {
-    character: ruleParts[1],
-    min: parseInt(ruleParts[0].split("-")[0], 10),
-    max: parseInt(ruleParts[0].split("-")[1], 10),
-    value: parts[1].trim(),
-  };
-});
+let endRow = map.length;
 
 let answer = 0;
 
-for (let row of rows) {
-  let characterAmount = row.value.split("").filter((x) => x === row.character)
-    .length;
+let currentX = 0;
+let currentY = 0;
 
-  if (characterAmount >= row.min && characterAmount <= row.max) answer++;
+let step = { x: 3, y: 1 };
+
+while (true) {
+  currentX += step.x;
+  currentY += step.y;
+
+  if (currentY >= endRow) {
+    break;
+  }
+
+  if (currentX > map[0].length - 1) {
+    currentX -= map[0].length;
+  }
+
+  if (map[currentY][currentX] === "#") {
+    answer++;
+
+    map[currentY][currentX] = "X";
+  } else {
+    map[currentY][currentX] = "O";
+  }
 }
 
 consola.default.info("Answer: " + answer);
 
-let validAnswer = 445;
+let validAnswer = 156;
 
 validAnswer
   ? answer === validAnswer

@@ -2,8 +2,16 @@ import * as fs from "fs";
 import * as _ from "lodash";
 import * as consola from "consola";
 
-//let input = fs.readFileSync("src/day02/_test.txt", { encoding: "utf8" });
-let input = fs.readFileSync("src/day02/_input.txt", { encoding: "utf8" });
+var time = new Date();
+
+let day = "02";
+
+// let input = fs.readFileSync("src/day" + day + "/_test.txt", {
+//   encoding: "utf8",
+// });
+let input = fs.readFileSync("src/day" + day + "/_input.txt", {
+  encoding: "utf8",
+});
 
 let rows = input.split("\n").map((x) => {
   let parts = x.split(":");
@@ -39,3 +47,10 @@ validAnswer
     ? consola.default.success("Valid")
     : consola.default.error("Not valid anymore, answer must be " + validAnswer)
   : consola.default.warn("No valid answer known yet");
+
+let executionTime = new Date().getTime() - time.getTime();
+
+console.info(executionTime + "ms");
+console.log();
+
+process.send(executionTime);

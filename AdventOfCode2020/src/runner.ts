@@ -2,35 +2,42 @@ import * as fs from "fs";
 import * as path from "path";
 import * as childProcess from "child_process";
 
+var time = new Date();
+
 const directoryPath = path.join(__dirname);
 
+let executionTime = 0;
+
 function runScript(scriptPath, callback) {
-  // keep track of whether callback has been invoked to prevent multiple invocations
-  var invoked = false;
+  var callbackReceived = false;
 
   var childProcessFork = childProcess.fork(scriptPath);
 
-  var time = new Date();
-
   function done(err) {
-    console.info(new Date().getTime() - time.getTime() + "ms");
-    console.log();
-
     callback(err);
   }
 
-  // listen for errors as they may prevent the exit event from firing
+  childProcessFork.on("message", function (message) {
+    executionTime += parseInt(message.toString(), 10);
+  });
+
   childProcessFork.on("error", function (err) {
-    if (invoked) return;
-    invoked = true;
+    if (callbackReceived) {
+      return;
+    }
+
+    callbackReceived = true;
 
     done(err);
   });
 
-  // execute the callback once the process has finished running
   childProcessFork.on("exit", function (code) {
-    if (invoked) return;
-    invoked = true;
+    if (callbackReceived) {
+      return;
+    }
+
+    callbackReceived = true;
+
     var err = code === 0 ? null : new Error("exit code " + code);
 
     done(err);
@@ -63,4 +70,9 @@ for (let day of days) {
       });
     });
   }
+
+  promiseChain = promiseChain.then(() => {
+    console.info("Total execution time: " + executionTime + "ms");
+    console.log();
+  });
 }
