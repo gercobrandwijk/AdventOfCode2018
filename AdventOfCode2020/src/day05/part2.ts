@@ -69,22 +69,13 @@ for (let row of rows) {
 }
 
 answers = answers.sort((x, y) => x - y);
-answers.splice(0, 1);
-answers.splice(answers.length - 1, 1);
 
-let lastAnswer: number;
 let answer: number;
 
-for (let currentAnswer of answers) {
-  if (!lastAnswer) {
-    lastAnswer = currentAnswer;
-  } else {
-    if (currentAnswer > lastAnswer + 1) {
-      answer = currentAnswer - 1;
-    }
+for (let i = 2; i < answers.length - 1; i++) {
+  if (answers[i] == answers[i - 1] + 2) {
+    answer = answers[i] - 1;
   }
-  
-  lastAnswer = currentAnswer;
 }
 
 consola.default.info("Answer: " + answer);
