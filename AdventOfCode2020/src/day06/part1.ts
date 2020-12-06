@@ -13,27 +13,21 @@ let input = fs.readFileSync("src/day" + day + "/_input.txt", {
   encoding: "utf8",
 });
 
-let groups: string[] = input.split("\r\n\r\n");
+let answer: number = input
+  .split("\r\n\r\n")
+  .map((group) => {
+    return group.split("\r\n");
+  })
+  .map((groupRows) => {
+    let groupAnswer: Set<string> = new Set();
 
-let answer = 0;
+    groupRows.forEach((groupRow) =>
+      Array.from(groupRow).forEach((character) => groupAnswer.add(character))
+    );
 
-for (let group of groups) {
-  let groupAnswer = [];
-
-  let groupRows: string[] = group.split("\r\n");
-
-  let groupRowItems = groupRows.map((x) => Array.from(x));
-
-  for (let groupRowItem of groupRowItems) {
-    for (let groupRowItemCharacter of groupRowItem) {
-      groupAnswer.push(groupRowItemCharacter);
-    }
-  }
-
-  groupAnswer = _.uniq(groupAnswer);
-
-  answer += groupAnswer.length;
-}
+    return groupAnswer.size;
+  })
+  .reduce((sum, size) => sum + size, 0);
 
 consola.default.info("Answer: " + answer);
 

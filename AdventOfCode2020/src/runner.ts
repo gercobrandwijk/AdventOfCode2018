@@ -2,8 +2,6 @@ import * as fs from "fs";
 import * as path from "path";
 import * as childProcess from "child_process";
 
-var time = new Date();
-
 const directoryPath = path.join(__dirname);
 
 let executionTime = 0;
@@ -63,7 +61,9 @@ for (let day of days) {
         console.log(path.substring(path.indexOf("/")));
 
         runScript(path, function (err) {
-          if (err) console.error(err);
+          if (err) {
+            console.error(err);
+          }
 
           resolve();
         });

@@ -13,31 +13,25 @@ let input = fs.readFileSync("src/day" + day + "/_input.txt", {
   encoding: "utf8",
 });
 
-let groups: string[] = input.split("\r\n\r\n");
+let answer: number = input
+  .split("\r\n\r\n")
+  .map((group) => {
+    return group.split("\r\n");
+  })
+  .map((groupRows) => {
+    let groupAnswers: { [key: string]: number } = {};
 
-let answer = 0;
+    groupRows.forEach((groupRow) => {
+      Array.from(groupRow).forEach((character) => {
+        groupAnswers[character]
+          ? groupAnswers[character]++
+          : (groupAnswers[character] = 1);
+      });
+    });
 
-for (let group of groups) {
-  let groupAnswers: { [key: string]: number } = {};
-
-  let groupRows: string[] = group.split("\r\n");
-
-  let groupRowItems = groupRows.map((x) => Array.from(x));
-
-  for (let groupRowItem of groupRowItems) {
-    for (let groupRowItemCharacter of groupRowItem) {
-      if (!groupAnswers[groupRowItemCharacter]) {
-        groupAnswers[groupRowItemCharacter] = 1;
-      } else {
-        groupAnswers[groupRowItemCharacter] += 1;
-      }
-    }
-  }
-
-  answer += Object.keys(groupAnswers).filter(
-    (x) => groupAnswers[x] === groupRows.length
-  ).length;
-}
+    return Object.keys(groupAnswers).filter(x => groupAnswers[x] === groupRows.length).length;
+  })
+  .reduce((sum, size) => sum + size, 0);
 
 consola.default.info("Answer: " + answer);
 
