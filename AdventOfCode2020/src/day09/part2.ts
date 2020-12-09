@@ -49,7 +49,6 @@ for (let startNumber = 0; startNumber < numbers.length; startNumber++) {
   }
 
   if (sum === invalidNumber) {
-    console.log(lowestValue, highestValue);
     answer = lowestValue + highestValue;
 
     break;

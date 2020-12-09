@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as childProcess from "child_process";
+import * as consola from "consola";
 
 const directoryPath = path.join(__dirname);
 
@@ -58,7 +59,12 @@ for (let day of days) {
   for (let path of paths) {
     promiseChain = promiseChain.then(() => {
       return new Promise((resolve) => {
-        console.log(path.substring(path.indexOf("/")));
+        let pathSplitted = path.substring(path.indexOf("/") + 1);
+
+        let name = pathSplitted.split("/")[0];
+        let part = pathSplitted.split("/")[1].split(".js")[0];
+
+        console.log(name + " - " + part);
 
         runScript(path, function (err) {
           if (err) {
@@ -70,9 +76,10 @@ for (let day of days) {
       });
     });
   }
-
-  promiseChain = promiseChain.then(() => {
-    console.info("Total execution time: " + executionTime + "ms");
-    console.log();
-  });
 }
+
+promiseChain = promiseChain.then(() => {
+  consola.default.info("Total    " + executionTime + "ms");
+
+  console.log();
+});

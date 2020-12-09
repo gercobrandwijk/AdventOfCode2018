@@ -11,24 +11,29 @@ export function read(type: "test" | "input", day: string) {
   });
 }
 
-export function readAsLines(type: "test" | "input", day: string, seperator: string = "\r\n") {
+export function readAsLines(
+  type: "test" | "input",
+  day: string,
+  seperator: string = "\r\n"
+) {
   return read(type, day).split(seperator);
 }
 
 export function endExecution(time: number, answer: any, validAnswer: any) {
-  consola.default.info("Answer: " + answer);
+  if (validAnswer) {
+    if (answer === validAnswer) {
+      consola.default.success("Valid");
+    } else {
+      consola.default.error("Invalid, must be " + validAnswer);
+    }
+  }
 
-  validAnswer
-    ? answer === validAnswer
-      ? consola.default.success("Valid")
-      : consola.default.error(
-          "Not valid anymore, answer must be " + validAnswer
-        )
-    : consola.default.warn("No valid answer known yet");
+  consola.default.info("Answer   " + answer);
 
   let executionTime = new Date().getTime() - time;
 
-  console.info(executionTime + "ms");
+  consola.default.info("Time     " + executionTime + "ms");
+
   console.log();
 
   process.send(executionTime);
