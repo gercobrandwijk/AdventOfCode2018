@@ -1,18 +1,23 @@
 import * as _ from "lodash";
-import { endExecution, readAsLines, startExecution } from "../helpers";
+import { end, readAsLines, start } from "../helpers";
 
-let time = startExecution();
+let { time, execution } = start(
+  [
+    { file: "test", answer: undefined },
+    { file: "input", answer: undefined },
+  ],
+  false
+);
 
-let day = "XX";
+let lines = readAsLines("XX", execution);
 
-let lines = readAsLines("test", day);
-//let lines = readAsLines("input", day);
-
-
-
-
-
+//////////
+//////////
+//////////
+//////////
+//////////
+//////////
 
 let answer = undefined;
 
-endExecution(time, answer, undefined);
+end(time, answer, execution);

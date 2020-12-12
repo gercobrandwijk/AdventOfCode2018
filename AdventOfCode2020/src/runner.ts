@@ -43,13 +43,19 @@ function runScript(scriptPath, callback) {
   });
 }
 
-let days = fs
-  .readdirSync(directoryPath)
-  .filter((x) =>
-    process.argv[2] !== "today"
-      ? x.startsWith("day")
-      : x === "day" + ("0" + new Date().getDate()).slice(-2)
-  );
+let days = fs.readdirSync(directoryPath).filter((x) => {
+  if (process.argv[2]) {
+    if (process.argv[2] === "today") {
+      return x === "day" + ("0" + new Date().getDate()).slice(-2);
+    }
+
+    if (process.argv[2].startsWith("day")) {
+      return x.startsWith(process.argv[2]);
+    }
+  }
+
+  return x.startsWith("day");
+});
 
 let promiseChain = Promise.resolve();
 

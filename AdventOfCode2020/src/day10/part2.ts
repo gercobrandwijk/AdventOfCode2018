@@ -1,19 +1,13 @@
 import * as _ from "lodash";
-import { replace } from "lodash";
-import {
-  endExecution,
-  readAsLines,
-  startExecution,
-  writeArray,
-} from "../helpers";
+import { end, readAsLines, start } from "../helpers";
 
-let time = startExecution();
+let { time, execution } = start([
+  { file: "test1", answer: 8 },
+  { file: "test2", answer: 19208 },
+  { file: "input", answer: 1157018619904 },
+]);
 
-let day = "10";
-
-//let lines = readAsLines("test1", day);
-//let lines = readAsLines("test2", day);
-let lines = readAsLines("input", day);
+let lines = readAsLines("10", execution);
 
 let numbers = lines.map((x) => parseInt(x, 10));
 numbers.sort((x, y) => x - y);
@@ -23,65 +17,53 @@ numbers.push(numbers[numbers.length - 1] + 3);
 
 class Graph {
   index: number;
-  value: number;
-
-  pathCount?: number;
-
-  children: Graph[];
+  count: number;
+  children: number[];
 }
 
 let graphs: { [index: number]: Graph } = {};
 
 for (let i = 0; i < numbers.length; i++) {
-  if (!graphs[i]) {
-    graphs[i] = {
-      index: i,
-      value: numbers[i],
-      children: [],
-    };
-  }
+  graphs[i] = {
+    index: i,
+    count: null,
+    children: [],
+  };
 
-  for (let j = i + 1; j < numbers.length; j++) {
-    if (numbers[j] >= numbers[i] + 1 && numbers[j] <= numbers[i] + 3) {
-      if (!graphs[j]) {
-        graphs[j] = {
-          index: j,
-          value: numbers[j],
-          children: [],
-        };
-      }
+  let j = i + 1;
 
-      graphs[i].children.push(graphs[j]);
-    }
+  while (numbers[j] <= numbers[i] + 3) {
+    graphs[i].children.push(j);
 
-    if (numbers[j] >= numbers[i] + 3) {
-      break;
-    }
+    j++;
   }
 }
 
-function calculateGraphs(from: number, to: number): number {
+function calculateGraphs(currentIndex: number, endIndex: number): number {
   let pathCount = 0;
 
-  let currentGraph = graphs[from];
+  let currentGraph = graphs[currentIndex];
 
-  if (from === to) {
+  if (currentIndex === endIndex) {
     pathCount++;
 
-    currentGraph.pathCount = pathCount;
+    currentGraph.count = pathCount;
   } else {
-    for (let next of currentGraph.children.filter(
-      (x) => x.pathCount === undefined || x.pathCount === null
-    )) {
-      calculateGraphs(next.index, to);
+    let childIndexesToCount = currentGraph.children
+      .map((childIndex) => ({ index: childIndex, child: graphs[childIndex] }))
+      .filter((item) => item.child.count === null)
+      .map((item) => item.index);
+
+    for (let childIndex of childIndexesToCount) {
+      calculateGraphs(childIndex, endIndex);
     }
 
     pathCount += currentGraph.children.reduce(
-      (sum, curr) => sum + curr.pathCount,
+      (sum, childIndex) => sum + graphs[childIndex].count,
       0
     );
 
-    currentGraph.pathCount = pathCount;
+    currentGraph.count = pathCount;
   }
 
   return pathCount;
@@ -89,4 +71,4 @@ function calculateGraphs(from: number, to: number): number {
 
 let answer = calculateGraphs(0, numbers.length - 1);
 
-endExecution(time, answer, 1157018619904);
+end(time, answer, execution);

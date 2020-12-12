@@ -1,14 +1,12 @@
-import * as fs from "fs";
 import * as _ from "lodash";
-import { xor } from "lodash";
-import { endExecution, readAsLines, startExecution } from "../helpers";
+import { end, readAsLines, start } from "../helpers";
 
-let time = startExecution();
+let { time, execution } = start([
+  { file: "test", answer: 8 },
+  { file: "input", answer: 1639 },
+]);
 
-let day = "08";
-
-//let lines = readAsLines('test', day);
-let lines = readAsLines("input", day);
+let lines = readAsLines("08", execution);
 
 enum CommandAction {
   NoOperation,
@@ -115,4 +113,4 @@ for (let index of activePathIndexes) {
   switchAction(currentCommands[index]);
 }
 
-endExecution(time, answer, 1639);
+end(time, answer, execution);

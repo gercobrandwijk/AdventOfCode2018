@@ -1,37 +1,35 @@
 import * as fs from "fs";
 import * as consola from "consola";
+import { Execution } from "./models";
 
-export function startExecution() {
-  return new Date().getTime();
-}
-
-export function read(type: "test" | "test1" | "test2" | "input", day: string) {
-  return fs.readFileSync("src/day" + day + "/_" + type + ".txt", {
-    encoding: "utf8",
-  });
-}
-
-export function readAsLines(
-  type: "test" | "test1" | "test2" | "input",
-  day: string,
-  seperator: string = "\r\n"
+export function start(
+  executions: Execution[],
+  useTestFile: boolean | "1" | "2" = false
 ) {
-  return read(type, day).split(seperator);
+  let result = {
+    time: new Date().getTime(),
+    execution: executions.find((x) => {
+      if (useTestFile === true) return x.file === "test";
+      if (useTestFile === "1") return x.file === "test1";
+      if (useTestFile === "2") return x.file === "test2";
+
+      return x.file === "input";
+    }),
+  };
+
+  if (!result.execution) {
+    throw new Error("Execution not found");
+  }
+
+  return result;
 }
 
-export function writeArray(day: string, name: string, data: any[]) {
-  fs.writeFileSync(
-    "dist/day" + day + "/output_" + name + ".txt",
-    data.join("\r\n")
-  );
-}
-
-export function endExecution(time: number, answer: any, validAnswer: any) {
-  if (validAnswer) {
-    if (answer === validAnswer) {
+export function end(time: number, answer: any, execution: Execution) {
+  if (execution.answer) {
+    if (answer === execution.answer) {
       consola.default.success("Valid");
     } else {
-      consola.default.error("Invalid, must be " + validAnswer);
+      consola.default.error("Invalid, must be " + execution.answer);
     }
   }
 
@@ -44,4 +42,22 @@ export function endExecution(time: number, answer: any, validAnswer: any) {
   console.log();
 
   process.send(executionTime);
+}
+
+export function read(day: string, execution: Execution) {
+  return fs.readFileSync("src/day" + day + "/_" + execution.file + ".txt", {
+    encoding: "utf8",
+  });
+}
+
+export function readAsLines(
+  day: string,
+  execution: Execution,
+  seperator: string = "\r\n"
+) {
+  return read(day, execution).split(seperator);
+}
+
+export function writeFile(day: string, name: string, data: string) {
+  fs.writeFileSync("dist/day" + day + "/output_" + name + ".txt", data);
 }

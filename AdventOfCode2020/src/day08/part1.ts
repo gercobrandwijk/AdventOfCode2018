@@ -1,13 +1,12 @@
 import * as _ from "lodash";
-import * as consola from "consola";
-import { endExecution, readAsLines, startExecution } from "../helpers";
+import { end, readAsLines, start } from "../helpers";
 
-let time = startExecution();
+let { time, execution } = start([
+  { file: "test", answer: 5 },
+  { file: "input", answer: 1766 },
+]);
 
-let day = "08";
-
-//let lines = readAsLines('test', day);
-let lines = readAsLines("input", day);
+let lines = readAsLines("08", execution);
 
 enum CommandAction {
   NoOperation,
@@ -73,4 +72,4 @@ function execute(
 
 let answer = execute(commands).accumulator;
 
-endExecution(time, answer, 1766);
+end(time, answer, execution);

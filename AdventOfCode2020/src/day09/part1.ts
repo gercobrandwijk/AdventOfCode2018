@@ -1,12 +1,12 @@
 import * as _ from "lodash";
-import { endExecution, readAsLines, startExecution } from "../helpers";
+import { end, readAsLines, start } from "../helpers";
 
-let time = startExecution();
+let { time, execution } = start([
+  { file: "test", answer: 127 },
+  { file: "input", answer: 90433990 },
+]);
 
-let day = "09";
-
-//let lines = readAsLines("test", day);
-let lines = readAsLines("input", day);
+let lines = readAsLines("09", execution);
 
 let numbers = lines.map((x) => parseInt(x, 10));
 
@@ -46,4 +46,4 @@ for (let i = preamble; i < numbers.length; i++) {
   }
 }
 
-endExecution(time, answer, 90433990);
+end(time, answer, execution);
