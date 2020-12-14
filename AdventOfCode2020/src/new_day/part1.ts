@@ -6,7 +6,7 @@ let { time, execution } = start(
     { file: "test", answer: undefined },
     { file: "input", answer: undefined },
   ],
-  false
+  true
 );
 
 let lines = readAsLines("XX", execution);
